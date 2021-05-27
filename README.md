@@ -10,6 +10,15 @@ lang: "en"
 toc-own-page: true
 toc: true
 ---
+
+> How to turn this file into a pdf
+To turn the md file into an pdf just open a shell and type make. It should try to use pandoc to make a pdf. If this works right away great. If it doesn't then just follow the error messages until it works.  
+>
+Help:
+[Windows](https://www.google.com/search?q=make+on+windows), [Mac](https://www.google.com/search?q=make+on+mac)
+>Anyone can make a pull request  :)
+
+
 # 3 types of models
 All the ML techniques can be put into another 3 categories.
 - Instance based classifiers
@@ -21,7 +30,7 @@ All the ML techniques can be put into another 3 categories.
 - Discriminative
     - Directly estimate decision rule/boundary
     - Decision trees
-
+---
 # Reminder about probability theory 
 This is how bayies 
 ## Variables 
