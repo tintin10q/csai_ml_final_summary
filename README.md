@@ -187,11 +187,17 @@ There are different implementations of native bayes. The one you want to use dep
       You can use different ones for different types of data.
   
 # Decision Trees 
-With this technique the idea is build a large logic tree that will at the end give you the label of an input. Kind of like having a lot of if/elif/else statements. You get the label by traversing the tree one node at the time by answering boolean questions about a feature in you data. For example: Is the feature larger then 32? If yes go left if no go right.
+With this technique the idea is build a large logic tree made out of questions about the input data. Each question is a node in the tree. The awnser to a question decides which node you should go to next. For example: Is the feature larger than 32? If yes go left if no go right. Going left or right is called **branching**. At some point the tree will end with a special node that gives you the label of an input. These special end nodes are called **leafs**.
+This technique is like having a lot of if/elif/else statements. You get the label by traversing the tree one node at the time by answering boolean questions about a feature in you data. A node only askes **one question about one feature**. 
+
 ![Left or right](simple%20tree.png)
-This is like playing guess who. 
+
+> Because the tree is made out of binary questions you don't have to do anything to your data to use it. So you don't have to convert catagorical data to someting numerical or anything like that as the tree can just directly ask something about a categorical feature. For instance, you can just ask: is the color red?. The same thing for a numerical value. 
+
+Decision trees are a bit like playing guess who:
+
 ![Guess who](guesswho.png)
-If you go left you might get to a different question as when you would have gone right. Going left or right is called **branching**. Everytime you branch the tree the **depth** of the tree grows. You want the least depth while separating the data as much as possible. At the end of the tree there is no question anymore and just your label. This node is also called a **leaf**. 
+If you go left you might get to a different question as when you would have gone right. Everytime you branch the tree the **depth** of the tree grows. You want the least depth while separating the data as much as possible. At the end of the tree there is no question anymore and just your label. This node is also called a **leaf**. 
 
 ![More complicated tree](complicated_tree.png)
 
@@ -253,7 +259,7 @@ You can also calculate entropy for sequences.
 
 Now here are some more things about entropy she discussed. 
 
-What this shows is that if a sequence is more equal then as in there is an equal division of p between classes then the entropy is higher. 
+What this shows is that if a sequence is more equal then as in there is an equal division of p between classes then the entropy is higher. This makes entropy the method for dealing with unbalanced data.
 
 <u>The idea of using entropy is to try a split and then to calculate what the entropy is after the split. Take the option that has the **lowest entropy** after the split. This option has the least uncertainty.</u>
 
@@ -290,7 +296,7 @@ This is what you use in making the tree. **You want to find the split with the h
 ### Gini Coefficient
 ![Gini index](giniIndex.png)
 
-The gini function is called HGini. She did not really explain the idea behind gini maybe it was already explained in another lecture. But the idea is the same. Split, fill in the formula, use the split with the lowest gini.
+The gini function is called HGini. Gini is cheaper to calculate then entropy because there is entropy has a log operation and Gini does not. This is why this is the default in sklearn. However, Gini only works for binary classification. The idea is the same. Split, fill in the formula, use the split with the lowest gini.
 
  #### Example:
 
