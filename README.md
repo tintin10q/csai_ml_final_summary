@@ -11,7 +11,7 @@ toc-own-page: true
 toc: true
 ---
 
-> How to turn this file into a pdf
+> **How to turn this file into a pdf**
 To turn the md file into an pdf just open a shell and type make. It should try to use pandoc to make a pdf. If this works right away great. If it doesn't then just follow the error messages until it works.  
 >
 Help:
@@ -108,7 +108,7 @@ From joint probability we can say `P(x,y) = P(x|y)p(y) = P(y|x)P(x)` and this gi
 Now if we put this back into ML terms. x = features, y = label.
 > P(y|x) --> What is the chance for this label y given features x
 
-## Example
+### Example
 ![Bayes event table](bay_example.png) ![Bayes event table converted](bayes_filled_in_example.png)
 
 We want to know the prior of passing your exam if your teacher is Larry. We need the following. Let's also replace the P(x) and alike with semantics for this.
@@ -119,13 +119,13 @@ We want to know the prior of passing your exam if your teacher is Larry. We need
 Ok so with that we can calculate P(y|x) like P(y|x) = `P(y|x) = P(|y)p(x)/p(y)` or `P(Yes|Larry) = P(Larry|Yes)*P(Larry)/P(Yes)`
 So if we write it out: `P(Yes|Larry) = 0.34*0.7/0.35 = 0.68` Meaning the final probabilty of passing the exam if your theater is larry is 0.68
 
-# Naive Bayes classifier
+# Naive Bayes 
 With a the rules from above you can make a machine learning classifier. It is called Naive Bayes classifier. This is a **generative** based classifier. Meaning it builds a generative statistical model based on the data. This classifier is based on the predictions of that model. We do this by just giving the things below we saw before new names.
 
-> P(y|x): The posterior probability of a class (label) given the data (attribute) -> The probability of the label given the data
-> P(y): The prior probability of a label -> How likely is a certain class?
-> P(x|y): The likelihood of the data given the class -> Prior Probability of the data given a class. Opposite of (y|x)
-> P(x): The prior probability of the data
+>- P(y|x): The posterior probability of a class (label) given the data (attribute) -> The probability of the label given the data
+>- P(y): The prior probability of a label -> How likely is a certain class?
+>- P(x|y): The likelihood of the data given the class -> Prior Probability of the data given a class. Opposite of (y|x)
+>- P(x): The prior probability of the data
 
 We are after P(y|x) the label given the data. We can calculate this with P(y|**x**) = P(**x**|y)*P(y)/P(**x**).
 
@@ -134,14 +134,35 @@ In practice, you will always have multiple features so it looks like P(y|**X1** 
 This classifier is called a **Naive** Bayes because it assumes that all the features are independent. This makes it so you P(**X1**|y, **X2**, **X3**...**Xn**) = P(**X1**|y)
 
 This gives us: 
-P(y|X1...Xn) = ![Final formula naive Bayes](final_bayes.png) 
 
-His means multiply P(y) with all the priors of your classes and divide by the joint prior of all the data. Then you take the class with the highest **posterior probability**.
+P(y|X1...Xn) = 
+
+![Final formula naive Bayes](final_bayes.png)
+
+His means multiply P(y) with all the priors of your classes and divide by the joint prior of all the data. Then you take the class with the highest **posterior probability**. This is what you choose as your prediction.
 
 > **posterior probability** is the prior * likelyhood or the P(y) * P(**x**|y) of the equation. So we want the highest P(y|x)
 
-## Non discrete data
-So far we assumed that the data is always discrete but usually with machine learning this is not the case. The data is often continues. For these types of data we often use a **Gausian model** that assumes your data is normally distributed! In this model we assume thatt the input X is taken from a normal distribution X = N(mean, sigma). 
+### Non discrete data
+So far we assumed that the data is always discrete but usually with machine learning this is not the case. The data is often continues. For these types of data we often use a **Gausian model** that assumes your data is normally distributed! In this model we assume that the input X is taken from a normal distribution X = N(mean, sigma). 
+
+## Bayesian Regression
+So far we only looked at Bayesian classification. You can also do Bayesian regression. Take linear regression and just put it in the Bayesian model. You base the predictions on probability instead of a single point. You can optimise these with gradient decent even still. and there are multiple best values. You are more after the posterior distribution for the model parameters.  
+
+>**Linear regresssion reminder:**
+> 
+> y(x) = **W**^T**x** (frequentst view )
+>
+> Cost (sum of squares): y(W) = 0/2N*Sum(y(x<sub>i</sub>)-y<sub>i</sub>) 
+> 
+> <u>Predicted - what you found</u>
+
+With bayesian linear regression you formulate linear regression using probability distributions rather than point estimates. This assumes that y was drawn
+ from a probability distribution. The sklearn linear regression can actually use baysion regression for regression as well as it is build in.  
+
+![Baysian Regression](baysianregressionformula.png)
+
+So this is just linear regression in Bayesian pretty cool if you ask me its like a whole another way of looking at things.
 
 ### Different scikit learn bayes models
 There are different implementations of native bayes. The one you want to use depends on the type of your data.
@@ -209,8 +230,6 @@ Ok but what is the next best attribute? For classification, you can determine it
 - Information gain
 - Gini index
 
-For regression, you just minimize mean square error. 
-
 ### Entropy
 Entropy is **the level of uncertainty**. The higher the entropy the more uncertainty. 
 The formula is:
@@ -271,52 +290,34 @@ This is what you use in making the tree. **You want to find the split with the h
 ### Gini Coefficient
 ![Gini index](giniIndex.png)
 
-The gini function is called HGini. She did not really explain the idea behind gini. But the idea is the same. Split, fill in the formula, use the split with the lowest gini.
+The gini function is called HGini. She did not really explain the idea behind gini maybe it was already explained in another lecture. But the idea is the same. Split, fill in the formula, use the split with the lowest gini.
 
  #### Example:
 
 ![Gini example](giniexample.png)
 
-### Thresholds with continues values 
-For all of these methods if you have continues values you not only have to try splits but also different treshholds. Like if X between 10 and 12 or 10 and 13 what gives the best model improvement?
+## Thresholds with continues values 
+For all of these methods if you have continues values you not only have to try splits but also different thresholds. Like if X between 10 and 12 or 10 and 13 what gives the best model improvement? For decision tree regression you always need to do this. What, decision tree regression? 
+
+## Decision Tree Regression
+For regression with decision trees you use the **weighted mean square error** to decide on the splits. Try a lot of splits and choose the split that reduces the weighted mean square error the most. 
+
+![Decision tree regression](decisiontreeregresssion.png)
+
+N is the number of training samples at a certain node. y is the true target value y^ is the predicted sample mean. 
+
+As you can see just like with decision tree classification you again get these straight lines in the decision boundary. 
 
 ## Complexity of the model 
-The tree can get really big really quickly. The complexity of a decision tree model is determined by the depth of the tree. **Increasing the depth** of the tree increases the number of decision boundaries and **may lead to overfitting**. For example all these places might have overfitting:
+The tree can get huge quickly. The complexity of a decision tree model is determined by the depth of the tree. **Increasing the depth** of the tree increases the number of decision boundaries and **may lead to overfitting**. For example all these places might have overfitting:
 
 ![Overfitting](tree_depth9overfitting.png)
 
-### Ways of reducing model complexity.  (hyperparameters)
+### Ways of reducing model complexity. (hyperparameters)
  There are hyper parameters that limit model complicity. You should set alteast one of these as theoretically you can keep growing the tree forever.
 - max_depth = The max depth the tree can grow
 - max_leaf_nodes = The maximum leaf nodes that can exist
 - min_samples_split = A minimum amount of samples that have to be in a split to make a split.   
 There are also more parameters
 
-
-## Bayesian Regression
-This one is pretty nice. Take linear regression and just put it in the bayian model. 
-
-With bayesian linear regression you formulate linear regression using probability distributions rather than point estimates. This assumes that y was drawn from a probaility distribution. The sklearn linear regresion can actually use baysion regfor regression aswell 
-
-
->**Linear regresssion reminder:**
-> 
-> y(x) = **W**^T**x**
->
-> Cost (sum of squares): y(W) = 1/2N*Sum(y(x<sub>i</sub>)-y<sub>i</sub>)
-> 
-> This is the frequentist view 
-
-y(x)
-![bb](bayseianlinearregresion.png)
-So this is j ust linear regresion in baysion pretty cool if you ask me its like a whole another way of looking at things.
-
-You base the predictions on probability insteade of a single point. 
-And you can optimese these with gradient decent even still. and there are multiple best values. You are more aftere the posterior distribution for the model parameters. 
-
-### Decision Tree Regression
-You can do this with the weighted mean square error. That  Whatt split gives you the smallest erro that is the split you take . 
-
-![NICE](2021-05-27%2023.28.30.png)
-
-This is the methods 
+# Ensemble learning
