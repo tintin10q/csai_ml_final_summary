@@ -352,3 +352,19 @@ So far these algorihms were covered:
 Some of these are linear, and some of these are not. Linear algorithms fit a straight line. Non-linear algorithms don't.
 
 These algorithms are known as **weak learners** because they might be sensitive to overfitting. You can overcome this with regularization as we have seen but another way is with ensemble learning. 
+
+The problem that we always have with these models is figuring out how well they will work for unseen data. This problem is called **Estimating Generalization Error**. You can calculate this with: Generalization error = bias^2 + variance + noise
+
+**Error due to Bias:** Bias measures how far off in general these models' predictions are from the correct value.
+
+ **Error due to Variance:** The variance is how much the predictions for a given point vary between different realizations of the model.
+
+![Bias and variance typically trade off in relation to model complexity](biasvariancetradeoff.png) 
+
+Both variance and bias are related to model complexity. If you make your model **less complex** typically you get **less bais but more variance**. If you make your model **more complex** you get **more bais and less variance**. They both contribute to the error, so you want both to be low as possible. Which means you want to find a model complexity that gives a low bais and low variance. It is about finding a balance.   
+
+![Depiction of low and high variance and bias in dartboards](lowhighbaisvariance.png)
+
+This was picture made by scott fortmann roe. [He has a nice further explination about the bias and variance tradeoff.](http://scott.fortmann-roe.com/docs/BiasVariance.html)  
+
+A low bias, and a low variance are the two most fundamental features expected for a model.
