@@ -1,6 +1,5 @@
 ---
-title: Cognitive Neuroscience Report
-#subtitle: Group 13
+title: Machine learning summary
 date: June 2021
 author:
 - Quinten Cabo  
@@ -10,6 +9,8 @@ lang: "en"
 toc-own-page: true
 toc: true
 ---
+
+The summary is in [ML_final_summary.md](ML_final_summary.md)
 
 > **How to turn this file into a pdf**
 To turn the md file into an pdf just open a shell and type make. It should try to use pandoc to make a pdf. If this works right away great. If it doesn't then just follow the error messages until it works.  
@@ -187,28 +188,33 @@ There are different implementations of native bayes. The one you want to use dep
       You can use different ones for different types of data.
   
 # Decision Trees 
-With this technique the idea is build a large logic tree made out of questions about the input data. Each question is a node in the tree. The awnser to a question decides which node you should go to next. For example: Is the feature larger than 32? If yes go left if no go right. Going left or right is called **branching**. At some point the tree will end with a special node that gives you the label of an input. These special end nodes are called **leafs**.
-This technique is like having a lot of if/elif/else statements. You get the label by traversing the tree one node at the time by answering boolean questions about a feature in you data. A node only askes **one question about one feature**. 
+With this technique the idea is build a large logic tree made out of questions about the input data. Each question is a node in the tree. The answer to a question decides which node you should go to next. For example: Is the feature larger than 32? If yes go left if no go right. Going left or right is called **branching** or **traversing** the tree. A node only askes **one question about one feature**. At the end of the tree there are no question anymore and just your label. This node is also called a **leaf**. 
+
+This technique is like having a lot of if/elif/else statements. You get the label by traversing the tree one node at the time by answering boolean questions about a feature in you data. A nice advantage of this is that decision trees are not at all a black box as you basically have the if statements checking your inputs after you made the model. This makes it easier to share the model. 
 
 ![Left or right](simple%20tree.png)
 
-> Because the tree is made out of binary questions you don't have to do anything to your data to use it. So you don't have to convert catagorical data to someting numerical or anything like that as the tree can just directly ask something about a categorical feature. For instance, you can just ask: is the color red?. The same thing for a numerical value. 
+> Because the tree is made out of binary questions you don't have to do anything to your data to use it. So you don't have to convert categorical data to something numerical or anything like that as the tree can just directly ask something about a categorical feature. For instance, you can just ask: is the color red? Yes or No. The same thing for numerical values. 
+> 
+>This is really great as it reduces the preprocessing and it is intuitive.  
 
 Decision trees are a bit like playing guess who:
 
 ![Guess who](guesswho.png)
-If you go left you might get to a different question as when you would have gone right. Everytime you branch the tree the **depth** of the tree grows. You want the least depth while separating the data as much as possible. At the end of the tree there is no question anymore and just your label. This node is also called a **leaf**. 
+
+If you go left you might get to a different question as when you would have gone right. Everytime you branch the tree the **depth** of the tree grows. You want the least depth while separating the data as much as possible. A
 
 ![More complicated tree](complicated_tree.png)
 
 > All decision boundaries are perpendicular to the feature axes, because at each node a decision is made about one feature only. So if you see strait lines it is probably a decision tree.
 
-The goal behind decision trees is to get the best branching. You get the best branching based on the order you check the features. This is expressed in the **attribute value** WHAT IS THIS
+The goal behind decision trees is to get the best branching. You get the best branching based on the order you check the features and the thresholds you check for.
 
 You want to split as much "area" as possible like this:
+
 ![Each test/node layer in the tree splits your data further. Left is dept 1, Right is depth 2](tree_boundary.png) 
 
-> Every depth increase the amount of decision boundary lines increases with depth as well if that makes sense. This is because every depth down creates exponentially more paths. You are making your decision boundary and eliminating labels as you go along 
+> Every depth increases the amount of decision boundary lines increases with depth as well if that makes sense. This is because every depth down creates exponentially more paths. You are making your decision boundary and eliminating labels as you go along 
 > ![Dept 1](tree_depth1.png) ![Dept 2](tree_depth2.png) ![Dept 9](tree_depth9.png) 
 
 #### Example 
@@ -220,7 +226,7 @@ In this case what is better X1 or X2?
 If you split by asking is X1 true of false and it is true then you immediately get the good y. This is the most error reduction with the least depth. As in that case there are still 0 remaining wrong classified outcomes anymore. Thus splitting by X1 first is better. This will then also be indicated by those three measures.
 
 ## Choosing how to split your tree
-If you have a tree they using it is easy to use but getting the splits is the tricky part. The only way really is just trying a bunch of values/splits and look at some measures to give indication about the improvement it brought. For this we use the decision tree algorithm. This algorithm has to decide:
+If you have a tree they using it is easy to use but getting the splits is the tricky part. The only way really is just to try a bunch of values/splits and look at some measures to give indication about the improvement the split gives. Then you pick the split that gives the most improvement. For this we use the decision tree algorithm. This algorithm has to decide:
 - What features to ask about
 - What values to use in the question (Numbers for continues values, categories for categorical values)
 - What order to do the splitting in
@@ -231,6 +237,8 @@ The algorithm works like this:
 2. Split on the next best **attribute**
 3. Repeat
 
+
+## Decision tree classification
 Ok but what is the next best attribute? For classification, you can determine it based on these three things:
 - Entropy
 - Information gain
@@ -303,7 +311,7 @@ The gini function is called HGini. Gini is cheaper to calculate then entropy bec
 ![Gini example](giniexample.png)
 
 ## Thresholds with continues values 
-For all of these methods if you have continues values you not only have to try splits but also different thresholds. Like if X between 10 and 12 or 10 and 13 what gives the best model improvement? For decision tree regression you always need to do this. What, decision tree regression? 
+For all of these methods if you have continues values you not only have to try splits but also with different thresholds. Like if X between 10 and 12 or 10 and 13 what gives the best model improvement? 
 
 ## Decision Tree Regression
 For regression with decision trees you use the **weighted mean square error** to decide on the splits. Try a lot of splits and choose the split that reduces the weighted mean square error the most. 
@@ -326,4 +334,31 @@ The tree can get huge quickly. The complexity of a decision tree model is determ
 - min_samples_split = A minimum amount of samples that have to be in a split to make a split.   
 There are also more parameters
 
+## Advantages and Disadvantages of decision trees
+**Advantages**
+- Easy to interpret and make for straightforward visualizations
+- The interal workings are capable of being observed and thus makes it possible to easily reproduce work
+- Can handle both numerical and categorical data directly without preprocessing
+- Performs well on large datasets
+- Performs fast in general
+
+**Disadvantages**
+- Building decision trees requires algorithms that can find the optimal choice at each node
+- Prone to overfitting, especially when the trees' depth increases
+
 # Ensemble learning
+So far these algorithms were covered:
+
+| Classification      |Regression                     |
+|---------------------|-------------------------------|
+| Logistic Regresion  | Linear Regression             |
+| Linear SVMs         | Linear SVM                    |
+| KNN                 | KNN regression                |
+| Neural networks     | Polynomial Regression         |
+| Kernel SVM          | Decision Trees Regression     |
+| Naive Bayes         | Kernel SVM Regression         |
+| Decision trees      | Bayesian Linear Regression    |
+
+Some of these are linear, and some of these are not. Linear algorithms fit a straight line. Non-linear algorithms don't.
+
+These algorithms are known as **weak learners** because they might be sensitive to overfitting. You can overcome this with regularization as we have seen but another way is with ensemble learning. 

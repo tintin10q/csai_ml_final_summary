@@ -1,6 +1,5 @@
 ---
-title: Cognitive Neuroscience Report
-#subtitle: Group 13
+title: Machine learning summary
 date: June 2021
 author:
 - Quinten Cabo  
@@ -10,6 +9,7 @@ lang: "en"
 toc-own-page: true
 toc: true
 ---
+
 # 3 types of models
 All the ML techniques can be put into another 3 categories.
 - Instance based classifiers
@@ -21,7 +21,7 @@ All the ML techniques can be put into another 3 categories.
 - Discriminative
     - Directly estimate decision rule/boundary
     - Decision trees
-
+---
 # Reminder about probability theory 
 This is how bayies 
 ## Variables 
@@ -99,7 +99,7 @@ From joint probability we can say `P(x,y) = P(x|y)p(y) = P(y|x)P(x)` and this gi
 Now if we put this back into ML terms. x = features, y = label.
 > P(y|x) --> What is the chance for this label y given features x
 
-## Example
+### Example
 ![Bayes event table](bay_example.png) ![Bayes event table converted](bayes_filled_in_example.png)
 
 We want to know the prior of passing your exam if your teacher is Larry. We need the following. Let's also replace the P(x) and alike with semantics for this.
@@ -110,13 +110,13 @@ We want to know the prior of passing your exam if your teacher is Larry. We need
 Ok so with that we can calculate P(y|x) like P(y|x) = `P(y|x) = P(|y)p(x)/p(y)` or `P(Yes|Larry) = P(Larry|Yes)*P(Larry)/P(Yes)`
 So if we write it out: `P(Yes|Larry) = 0.34*0.7/0.35 = 0.68` Meaning the final probabilty of passing the exam if your theater is larry is 0.68
 
-# Naive Bayes classifier
+# Naive Bayes 
 With a the rules from above you can make a machine learning classifier. It is called Naive Bayes classifier. This is a **generative** based classifier. Meaning it builds a generative statistical model based on the data. This classifier is based on the predictions of that model. We do this by just giving the things below we saw before new names.
 
-> P(y|x): The posterior probability of a class (label) given the data (attribute) -> The probability of the label given the data
-> P(y): The prior probability of a label -> How likely is a certain class?
-> P(x|y): The likelihood of the data given the class -> Prior Probability of the data given a class. Opposite of (y|x)
-> P(x): The prior probability of the data
+>- P(y|x): The posterior probability of a class (label) given the data (attribute) -> The probability of the label given the data
+>- P(y): The prior probability of a label -> How likely is a certain class?
+>- P(x|y): The likelihood of the data given the class -> Prior Probability of the data given a class. Opposite of (y|x)
+>- P(x): The prior probability of the data
 
 We are after P(y|x) the label given the data. We can calculate this with P(y|**x**) = P(**x**|y)*P(y)/P(**x**).
 
@@ -125,14 +125,35 @@ In practice, you will always have multiple features so it looks like P(y|**X1** 
 This classifier is called a **Naive** Bayes because it assumes that all the features are independent. This makes it so you P(**X1**|y, **X2**, **X3**...**Xn**) = P(**X1**|y)
 
 This gives us: 
-P(y|X1...Xn) = ![Final formula naive Bayes](final_bayes.png) 
 
-His means multiply P(y) with all the priors of your classes and divide by the joint prior of all the data. Then you take the class with the highest **posterior probability**.
+P(y|X1...Xn) = 
+
+![Final formula naive Bayes](final_bayes.png)
+
+His means multiply P(y) with all the priors of your classes and divide by the joint prior of all the data. Then you take the class with the highest **posterior probability**. This is what you choose as your prediction.
 
 > **posterior probability** is the prior * likelyhood or the P(y) * P(**x**|y) of the equation. So we want the highest P(y|x)
 
-## Non discrete data
-So far we assumed that the data is always discrete but usually with machine learning this is not the case. The data is often continues. For these types of data we often use a **Gausian model** that assumes your data is normally distributed! In this model we assume thatt the input X is taken from a normal distribution X = N(mean, sigma). 
+### Non discrete data
+So far we assumed that the data is always discrete but usually with machine learning this is not the case. The data is often continues. For these types of data we often use a **Gausian model** that assumes your data is normally distributed! In this model we assume that the input X is taken from a normal distribution X = N(mean, sigma). 
+
+## Bayesian Regression
+So far we only looked at Bayesian classification. You can also do Bayesian regression. Take linear regression and just put it in the Bayesian model. You base the predictions on probability instead of a single point. You can optimise these with gradient decent even still. and there are multiple best values. You are more after the posterior distribution for the model parameters.  
+
+>**Linear regresssion reminder:**
+> 
+> y(x) = **W**^T**x** (frequentst view )
+>
+> Cost (sum of squares): y(W) = 0/2N*Sum(y(x<sub>i</sub>)-y<sub>i</sub>) 
+> 
+> <u>Predicted - what you found</u>
+
+With bayesian linear regression you formulate linear regression using probability distributions rather than point estimates. This assumes that y was drawn
+ from a probability distribution. The sklearn linear regression can actually use baysion regression for regression as well as it is build in.  
+
+![Baysian Regression](baysianregressionformula.png)
+
+So this is just linear regression in Bayesian pretty cool if you ask me its like a whole another way of looking at things.
 
 ### Different scikit learn bayes models
 There are different implementations of native bayes. The one you want to use depends on the type of your data.
@@ -157,22 +178,33 @@ There are different implementations of native bayes. The one you want to use dep
       You can use different ones for different types of data.
   
 # Decision Trees 
-With this technique the idea is build a large logic tree that will at the end give you the label of an input. Kind of like having a lot of if/elif/else statements. You get the label by traversing the tree one node at the time by answering boolean questions about a feature in you data. For example: Is the feature larger then 32? If yes go left if no go right.
+With this technique the idea is build a large logic tree made out of questions about the input data. Each question is a node in the tree. The answer to a question decides which node you should go to next. For example: Is the feature larger than 32? If yes go left if no go right. Going left or right is called **branching** or **traversing** the tree. A node only askes **one question about one feature**. At the end of the tree there are no question anymore and just your label. This node is also called a **leaf**. 
+
+This technique is like having a lot of if/elif/else statements. You get the label by traversing the tree one node at the time by answering boolean questions about a feature in you data. A nice advantage of this is that decision trees are not at all a black box as you basically have the if statements checking your inputs after you made the model. This makes it easier to share the model. 
+
 ![Left or right](simple%20tree.png)
-This is like playing guess who. 
+
+> Because the tree is made out of binary questions you don't have to do anything to your data to use it. So you don't have to convert categorical data to something numerical or anything like that as the tree can just directly ask something about a categorical feature. For instance, you can just ask: is the color red? Yes or No. The same thing for numerical values. 
+> 
+>This is really great as it reduces the preprocessing and it is intuitive.  
+
+Decision trees are a bit like playing guess who:
+
 ![Guess who](guesswho.png)
-If you go left you might get to a different question as when you would have gone right. Going left or right is called **branching**. Everytime you branch the tree the **depth** of the tree grows. You want the least depth while separating the data as much as possible. At the end of the tree there is no question anymore and just your label. This node is also called a **leaf**. 
+
+If you go left you might get to a different question as when you would have gone right. Everytime you branch the tree the **depth** of the tree grows. You want the least depth while separating the data as much as possible. A
 
 ![More complicated tree](complicated_tree.png)
 
 > All decision boundaries are perpendicular to the feature axes, because at each node a decision is made about one feature only. So if you see strait lines it is probably a decision tree.
 
-The goal behind decision trees is to get the best branching. You get the best branching based on the order you check the features. This is expressed in the **attribute value** WHAT IS THIS
+The goal behind decision trees is to get the best branching. You get the best branching based on the order you check the features and the thresholds you check for.
 
 You want to split as much "area" as possible like this:
+
 ![Each test/node layer in the tree splits your data further. Left is dept 1, Right is depth 2](tree_boundary.png) 
 
-> Every depth increase the amount of decision boundary lines increases with depth as well if that makes sense. This is because every depth down creates exponentially more paths. You are making your decision boundary and eliminating labels as you go along 
+> Every depth increases the amount of decision boundary lines increases with depth as well if that makes sense. This is because every depth down creates exponentially more paths. You are making your decision boundary and eliminating labels as you go along 
 > ![Dept 1](tree_depth1.png) ![Dept 2](tree_depth2.png) ![Dept 9](tree_depth9.png) 
 
 #### Example 
@@ -184,7 +216,7 @@ In this case what is better X1 or X2?
 If you split by asking is X1 true of false and it is true then you immediately get the good y. This is the most error reduction with the least depth. As in that case there are still 0 remaining wrong classified outcomes anymore. Thus splitting by X1 first is better. This will then also be indicated by those three measures.
 
 ## Choosing how to split your tree
-If you have a tree they using it is easy to use but getting the splits is the tricky part. The only way really is just trying a bunch of values/splits and look at some measures to give indication about the improvement it brought. For this we use the decision tree algorithm. This algorithm has to decide:
+If you have a tree they using it is easy to use but getting the splits is the tricky part. The only way really is just to try a bunch of values/splits and look at some measures to give indication about the improvement the split gives. Then you pick the split that gives the most improvement. For this we use the decision tree algorithm. This algorithm has to decide:
 - What features to ask about
 - What values to use in the question (Numbers for continues values, categories for categorical values)
 - What order to do the splitting in
@@ -195,12 +227,12 @@ The algorithm works like this:
 2. Split on the next best **attribute**
 3. Repeat
 
+
+## Decision tree classification
 Ok but what is the next best attribute? For classification, you can determine it based on these three things:
 - Entropy
 - Information gain
 - Gini index
-
-For regression, you just minimize mean square error. 
 
 ### Entropy
 Entropy is **the level of uncertainty**. The higher the entropy the more uncertainty. 
@@ -225,7 +257,7 @@ You can also calculate entropy for sequences.
 
 Now here are some more things about entropy she discussed. 
 
-What this shows is that if a sequence is more equal then as in there is an equal division of p between classes then the entropy is higher. 
+What this shows is that if a sequence is more equal then as in there is an equal division of p between classes then the entropy is higher. This makes entropy the method for dealing with unbalanced data.
 
 <u>The idea of using entropy is to try a split and then to calculate what the entropy is after the split. Take the option that has the **lowest entropy** after the split. This option has the least uncertainty.</u>
 
@@ -262,52 +294,61 @@ This is what you use in making the tree. **You want to find the split with the h
 ### Gini Coefficient
 ![Gini index](giniIndex.png)
 
-The gini function is called HGini. She did not really explain the idea behind gini. But the idea is the same. Split, fill in the formula, use the split with the lowest gini.
+The gini function is called HGini. Gini is cheaper to calculate then entropy because there is entropy has a log operation and Gini does not. This is why this is the default in sklearn. However, Gini only works for binary classification. The idea is the same. Split, fill in the formula, use the split with the lowest gini.
 
  #### Example:
 
 ![Gini example](giniexample.png)
 
-### Thresholds with continues values 
-For all of these methods if you have continues values you not only have to try splits but also different treshholds. Like if X between 10 and 12 or 10 and 13 what gives the best model improvement?
+## Thresholds with continues values 
+For all of these methods if you have continues values you not only have to try splits but also with different thresholds. Like if X between 10 and 12 or 10 and 13 what gives the best model improvement? 
+
+## Decision Tree Regression
+For regression with decision trees you use the **weighted mean square error** to decide on the splits. Try a lot of splits and choose the split that reduces the weighted mean square error the most. 
+
+![Decision tree regression](decisiontreeregresssion.png)
+
+N is the number of training samples at a certain node. y is the true target value y^ is the predicted sample mean. 
+
+As you can see just like with decision tree classification you again get these straight lines in the decision boundary. 
 
 ## Complexity of the model 
-The tree can get really big really quickly. The complexity of a decision tree model is determined by the depth of the tree. **Increasing the depth** of the tree increases the number of decision boundaries and **may lead to overfitting**. For example all these places might have overfitting:
+The tree can get huge quickly. The complexity of a decision tree model is determined by the depth of the tree. **Increasing the depth** of the tree increases the number of decision boundaries and **may lead to overfitting**. For example all these places might have overfitting:
 
 ![Overfitting](tree_depth9overfitting.png)
 
-### Ways of reducing model complexity.  (hyperparameters)
+### Ways of reducing model complexity. (hyperparameters)
  There are hyper parameters that limit model complicity. You should set alteast one of these as theoretically you can keep growing the tree forever.
 - max_depth = The max depth the tree can grow
 - max_leaf_nodes = The maximum leaf nodes that can exist
 - min_samples_split = A minimum amount of samples that have to be in a split to make a split.   
 There are also more parameters
 
+## Advantages and Disadvantages of decision trees
+**Advantages**
+- Easy to interpret and make for straightforward visualizations
+- The interal workings are capable of being observed and thus makes it possible to easily reproduce work
+- Can handle both numerical and categorical data directly without preprocessing
+- Performs well on large datasets
+- Performs fast in general
 
-## Bayesian Regression
-This one is pretty nice. Take linear regression and just put it in the bayian model. 
+**Disadvantages**
+- Building decision trees requires algorithms that can find the optimal choice at each node
+- Prone to overfitting, especially when the trees' depth increases
 
-With bayesian linear regression you formulate linear regression using probability distributions rather than point estimates. This assumes that y was drawn from a probaility distribution. The sklearn linear regresion can actually use baysion regfor regression aswell 
+# Ensemble learning
+So far these algorihms were covered:
 
+| Classification      |Regression                     |
+|---------------------|-------------------------------|
+| Logistic Regresion  | Linear Regression             |
+| Linear SVMs         | Linear SVM                    |
+| KNN                 | KNN regression                |
+| Neural networks     | Polynomial Regression         |
+| Kernel SVM          | Decision Trees Regression     |
+| Naive Bayes         | Kernel SVM Regression         |
+| Decision trees      | Bayesian Linear Regression    |
 
->**Linear regresssion reminder:**
-> 
-> y(x) = **W**^T**x**
->
-> Cost (sum of squares): y(W) = 1/2N*Sum(y(x<sub>i</sub>)-y<sub>i</sub>)
-> 
-> This is the frequentist view 
+Some of these are linear, and some of these are not. Linear algorithms fit a straight line. Non-linear algorithms don't.
 
-y(x)
-![bb](bayseianlinearregresion.png)
-So this is j ust linear regresion in baysion pretty cool if you ask me its like a whole another way of looking at things.
-
-You base the predictions on probability insteade of a single point. 
-And you can optimese these with gradient decent even still. and there are multiple best values. You are more aftere the posterior distribution for the model parameters. 
-
-### Decision Tree Regression
-You can do this with the weighted mean square error. That  Whatt split gives you the smallest erro that is the split you take . 
-
-![NICE](2021-05-27%2023.28.30.png)
-
-This is the methods 
+These algorithms are known as **weak learners** because they might be sensitive to overfitting. You can overcome this with regularization as we have seen but another way is with ensemble learning. 
