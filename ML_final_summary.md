@@ -336,7 +336,8 @@ There are also more parameters
 - Building decision trees requires algorithms that can find the optimal choice at each node
 - Prone to overfitting, especially when the trees' depth increases
 
-# Ensemble learning
+# Bias and variance
+Before we move on to ensamble learning lets have a reflection moment. 
 So far these algorihms were covered:
 
 | Classification      |Regression                     |
@@ -349,7 +350,7 @@ So far these algorihms were covered:
 | Naive Bayes         | Kernel SVM Regression         |
 | Decision trees      | Bayesian Linear Regression    |
 
-Some of these are linear, and some of these are not. Linear algorithms fit a straight line. Non-linear algorithms don't.
+Some of these are linear, and some of these are not. Linear algorithms create a straight decision boundary line. Non-linear algorithms don't.
 
 These algorithms are known as **weak learners** because they might be sensitive to overfitting. You can overcome this with regularization as we have seen but another way is with ensemble learning. 
 
@@ -359,7 +360,7 @@ The problem that we always have with these models is figuring out how well they 
 
  **Error due to Variance:** The variance is how much the predictions for a given point vary between different realizations of the model.
 
-![Bias and variance typically trade off in relation to model complexity](biasvariancetradeoff.png) 
+![Bias and variance typically trade off in relation to model complexity](biasvariancetradeoff.png)
 
 Both variance and bias are related to model complexity. If you make your model **less complex** typically you get **less bais but more variance**. If you make your model **more complex** you get **more bais and less variance**. They both contribute to the error, so you want both to be low as possible. Which means you want to find a model complexity that gives a low bais and low variance. It is about finding a balance.   
 
@@ -368,3 +369,32 @@ Both variance and bias are related to model complexity. If you make your model *
 This was picture made by scott fortmann roe. [He has a nice further explination about the bias and variance tradeoff.](http://scott.fortmann-roe.com/docs/BiasVariance.html)  
 
 A low bias, and a low variance are the two most fundamental features expected for a model.
+
+Here are more charts that show the effect even more! Made by Duda and Hart.
+
+![Varience and bias even more graphs](biasandvarianceevenmore.png)
+
+The bais and variance are the cause of the underfitting overfitting problem. Because of it you normally expect model performance to behave like this: 
+
+![Bais and variance trade off plotted](baisvariancetradeoff2.0.png)
+
+It seems like the models so far have to deal with this problem. Especially logistic regression, naive bayes, knn, shallow decision trees, linear svm and kernel svm. Some of these have high bias → **low degree of freedom models**. Or they have too much variance to be robust → **high degree of freedom models**. These models do not necessarily perform well by themselves. But who says you can only have 1 model? I don't.
+
+# Ensemble learning
+Ensemble methods try to reduce bias and or variance of weak (single) models by combining several of them together to achieve better performance. 
+
+There are 2 main ways of doing this based on the type of model you are using. The methods are called **Bagging** and **Boosting**.
+
+## Bagging
+This technique is for low bais and high variance models. You train multiple models on **bootstrapped data** and then take the **average**. This averaing will decrease the variance decrease the variance. 
+
+## Boosting
+This technique is for a high bais and low variance models. You combine the models sequentially to reduce the bais. You do this by running multiple weak models multiple times on (reweighted) training data and then let the learned classifiers vote (Gradient Boosting)
+
+But why stop there? We can even combine bagging and boosting again by using 2 other methods. **Voting** and stacking.
+
+## Voting 
+Voting is a method were you make multiple models vote on what the output should be. This makes the most sense for classifiers. You just train multiple models. Each model votes on what they think is the correct label. You pick the label with the most votes.
+
+## Stacking 
+Trains many models in parallel and combines them by training on a meta model to output a prediction based on different weak models predictions. 
