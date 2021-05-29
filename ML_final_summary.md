@@ -381,20 +381,72 @@ The bais and variance are the cause of the underfitting overfitting problem. Bec
 It seems like the models so far have to deal with this problem. Especially logistic regression, naive bayes, knn, shallow decision trees, linear svm and kernel svm. Some of these have high bias → **low degree of freedom models**. Or they have too much variance to be robust → **high degree of freedom models**. These models do not necessarily perform well by themselves. But who says you can only have 1 model? I don't.
 
 # Ensemble learning
-Ensemble methods try to reduce bias and or variance of weak (single) models by combining several of them together to achieve better performance. 
-
-There are 2 main ways of doing this based on the type of model you are using. The methods are called **Bagging** and **Boosting**.
-
-## Bagging
-This technique is for low bais and high variance models. You train multiple models on **bootstrapped data** and then take the **average**. This averaing will decrease the variance decrease the variance. 
-
-## Boosting
-This technique is for a high bais and low variance models. You combine the models sequentially to reduce the bais. You do this by running multiple weak models multiple times on (reweighted) training data and then let the learned classifiers vote (Gradient Boosting)
-
-But why stop there? We can even combine bagging and boosting again by using 2 other methods. **Voting** and stacking.
+Ensemble methods try to reduce bias and or variance of weak (single) models by combining several of them together to achieve better performance. The ways of doing this are called **Voting**, **Bagging**, **Boosting** and **Stacking**.
 
 ## Voting 
-Voting is a method were you make multiple models vote on what the output should be. This makes the most sense for classifiers. You just train multiple models. Each model votes on what they think is the correct label. You pick the label with the most votes.
+Voting is a method were you make multiple models vote on what the output should be. This makes the most sense for classifiers. You just train multiple models and each model votes on what they predict is the correct label. You pick the label with the most votes. This is called **hard voting**. Because the idea of voting is simple it works with any model also neural networks. But we can do better than just counting votes.
+
+Some classifiers also know how "sure" they are of their conviction. For instance naive Bayes. You could give the votes of these models a higher weight.  
+
+Some classifiers will be the most "sure" about a particular part of the space. You could give these models vote more weight for this space. 
+
+If you use weights you in the end you average the results instead of just counting votes. This is called **soft voting**.
+
+More models take longer to train but the results you will get are also based on much more. However, **only combine models if they are not correlated**. You can only do averaging instead of counting if all the models output calibraged/scaled ("good") probabilities.
+
+The sklearn version of this is called VotingClassifier. You give this class a list of other models. 
+
+## Bagging (bootstrap aggregation)
+Bagging fits several "independent" models and averages their predictions in order to lower the variance. So this technique is for low bais and high variance models.
+
+Fitting fully independent models requires too much data. This is why we need bootstrapping. **Bootstrapping is taking random samples of the same size (B) from the dataset with repetition.** With repetition means that a datapoint can be in multiple samples. Once you have the bootstrapped samples you can train models on them. These could be all the same or different ones. 
+
+![Bootrapping](bootrapping.png)
+
+So **bootstrapping is creating the samples** from the data and **bagging is fitting models on these samples and taking the average**. You basically create a lot of models based on essentially the same data but you just leave out random data points for every sample. This way each model will have slightly different results. The average of these results will have a lower variance.
+
+![Nice bagging picture](nicebagging.png)
+
+With bagging you can also **approximate the variance or confidence interval of the estimator** by evaluating the variance that all the bootstrapped samples have. 
+For regression a simple average is used for classifiation you can use the voting techniques. 
+
+![Approximate the variance process](aproxvariancebagging.png)
+
+Bagging is implemented in sklearn with BaggingClassifier and BaggingRegressor.
+
+### Random forests
+Random forests is a bagging method were **deep decision trees**, fitted on bootstrap samples, are combined to produce an output with lower variance. This method is also called a random decision forest. 
+
+Decision Trees can be: 
+- **Shallow**. Shallow trees have low depth, these trees have less variance but higher bias, a better choice for sequential methods\boosting
+- **Deep**. Deep trees have low bias and high variance. Better choice for bagging method as that is focused on reducing the variance. 
+
+With random forests you do bagging but **you only use (deep) decision trees** to train on the bootstrapped samples.
+In addition to that the **set of features you base the splitting decisions on are randomly selected.** So the decision trees only use a subset of the available features to make the splits. This is done to **reduce correlation**. More trees are always beter. 
+
+
+![Bootstrapping and subset for each split](decisiontreesplit.png)
+>So you do double randomization; each tree picks a bootstrap sample and then also only uses a random sample of the features in the picked bootstrap sample to decide on the splits of the decision tree.
+> 
+Here is the full picture of random forest/random decision forests:
+
+![Random forest full picture](randomforestfullpicture.png)
+
+Random forest is called a strong learner because it is composed of multiple (weak) trees. 
+
+#### Getting results from the forest
+How do you combine the results of the trees? You average the tree. The result of the averaging is called a random forest. Like this:
+
+![Random forest averagin](randomforestresult.png)
+
+In this case we averaged 2 decision tree results. In the areas where the trees don't mach the average is 0 (because there are only 2 trees) which means you don't know the answer. If you have more trees you would have places were you are more and less sure instead. To decide on an output for **classification you take the mode** of the classes that were outputted and for **regression you could take the mean** of the values outputted by the trees.  
+
+With sklearn the model is called `ensemble.RandomForestClassifer`. Special hyper parameter that random forests have are:
+- `max_features`. Hopefully it is obvious what that does. The recommendation is to pick `n_features^0.5` for classification and n_features for regression. 
+- n_estimators, This is the amount of trees you want. The more the better. It is recomended to have atleast 100. But the more the better.
+
+## Boosting
+This technique is for a high bais and low variance models. You combine the models sequentially to reduce the bais. You do this by running multiple weak models multiple times on (reweighed) training data and then let the learned classifiers vote (Gradient Boosting)
 
 ## Stacking 
 Trains many models in parallel and combines them by training on a meta model to output a prediction based on different weak models predictions. 
