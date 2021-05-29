@@ -437,7 +437,7 @@ Random forest is called a strong learner because it is composed of multiple (wea
 #### Getting results from the forest
 How do you combine the results of the trees? You average the tree. The result of the averaging is called a random forest. Like this:
 
-![Random forest averagin](randomforestresult.png)
+![Random forest averaging](randomforestresult.png)
 
 In this case we averaged 2 decision tree results. In the areas where the trees don't mach the average is 0 (because there are only 2 trees) which means you don't know the answer. If you have more trees you would have places were you are more and less sure instead. To decide on an output for **classification you take the mode** of the classes that were outputted and for **regression you could take the mean** of the values outputted by the trees.  
 
@@ -446,7 +446,24 @@ With sklearn the model is called `ensemble.RandomForestClassifer`. Special hyper
 - n_estimators, This is the amount of trees you want. The more the better. It is recomended to have atleast 100. But the more the better.
 
 ## Boosting
-This technique is for a high bais and low variance models. You combine the models sequentially to reduce the bais. You do this by running multiple weak models multiple times on (reweighed) training data and then let the learned classifiers vote (Gradient Boosting)
+With boosting you fit the models in sequence unlike bagging which fits in parallel. You do this, so that a model knows about the results of the previous model. This way a model can give more importance to the observations in the dataset that were badly handled by the previous models in the sequence. This way bias can be reduced. So this technique is for a high bais and low variance models. 
+
+This picture shows how you create models sequentially like this:
+
+![Boosting](boosting.png)
+
+There are 2 ways to create models like this **Ada boost** and **Gradient Boost**.
+
+### Ada boost
+
+![Ada boost](adaboost.png)
+
+![Ada boost](adaboost2.png)
+
+The  
+
+
+### Gradient boost
 
 ## Stacking 
 Trains many models in parallel and combines them by training on a meta model to output a prediction based on different weak models predictions. 
