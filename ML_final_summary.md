@@ -443,27 +443,41 @@ In this case we averaged 2 decision tree results. In the areas where the trees d
 
 With sklearn the model is called `ensemble.RandomForestClassifer`. Special hyper parameter that random forests have are:
 - `max_features`. Hopefully it is obvious what that does. The recommendation is to pick `n_features^0.5` for classification and n_features for regression. 
-- n_estimators, This is the amount of trees you want. The more the better. It is recomended to have atleast 100. But the more the better.
+- `n_estimators`, This is the amount of trees you want. The more the better. It is recomended to have atleast 100. But the more the better.
 
 ## Boosting
-With boosting you fit the models in sequence unlike bagging which fits in parallel. You do this, so that a model knows about the results of the previous model. This way a model can give more importance to the observations in the dataset that were badly handled by the previous models in the sequence. This way bias can be reduced. So this technique is for a high bais and low variance models. 
+With boosting you fit the weak models in sequence unlike bagging which fits in parallel. You do this, so that a model knows about the results of the previous model. This way a model can give more importance to the observations in the dataset that were badly handled by the previous models in the sequence. This way bias can be reduced. So this technique is for a high bais and low variance models. 
 
 This picture shows how you create models sequentially like this:
 
 ![Boosting](boosting.png)
 
-There are 2 ways to create models like this **Ada boost** and **Gradient Boost**.
+The ways discussed creating models like this are **Ada boost** and **Gradient Boost**.
 
 ### Ada boost
+The idea of adaptive boosting is that you run a weak model in the chain. Then find out which points were **wrongly classified** and then give these points a **higher weight** to make them more important for the next model. This way the next model will try to focus on correctly predicting these specific points. This is called **updating the sample weights**.
+
+The weak model itself also gets a weight based on how well it predicted the data. This is called the **update coefficient** or **the amount of say**. Keep doing this until you get through the chain. At the end you merge all the weak models based on their update coefficients and make the prediction. 
+
+You can use any weak learning model you want but often a decision tree with depth 1 is used. These are called **stumps**.
 
 ![Ada boost](adaboost.png)
 
 ![Ada boost](adaboost2.png)
 
-The  
+[Video going into more depth about ada boosting](https://www.youtube.com/watch?v=LsK-xG1cLYA)
 
 
-### Gradient boost
+### Gradient boosting
+Gradient boosting starts with a simple prediction it could be the mean but it is just a guess. This guess will have a certain error/residuals. Then gradient boosting tries to fit a weak model to predict the residual based on the data. Instead of making stumps like adaboost, gradient boost can make bigger trees, but you still set a max size. With these bigger trees it tries to predict the pseudo residuals of the model instead of the features. Then when this tree is made you have to scale the prediction down with a learning rate. Then combine it with the original prediction, and you should have moved a bit into the right direction from the original prediction. This will give you new pseudo residuals the next tree can try to predict. This tree is then also added to the chain and the residuals should keep getting smaller whith every tree you add.
+
+The idea is to find out what the best next tree is every time. I don't get this one :'(
+
+![img_5.png](img_5.png)
+
+For classification log loss is used and for regression square loss is used. 
+
+[Video going into more depth about ada boosting](https://www.youtube.com/watch?v=3CC4N4z3GJc)
 
 ## Stacking 
 Trains many models in parallel and combines them by training on a meta model to output a prediction based on different weak models predictions. 
