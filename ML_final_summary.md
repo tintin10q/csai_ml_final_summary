@@ -467,17 +467,41 @@ You can use any weak learning model you want but often a decision tree with dept
 
 [Video going into more depth about ada boosting](https://www.youtube.com/watch?v=LsK-xG1cLYA)
 
-
 ### Gradient boosting
-Gradient boosting starts with a simple prediction it could be the mean but it is just a guess. This guess will have a certain error/residuals. Then gradient boosting tries to fit a weak model to predict the residual based on the data. Instead of making stumps like adaboost, gradient boost can make bigger trees, but you still set a max size. With these bigger trees it tries to predict the pseudo residuals of the model instead of the features. Then when this tree is made you have to scale the prediction down with a learning rate. Then combine it with the original prediction, and you should have moved a bit into the right direction from the original prediction. This will give you new pseudo residuals the next tree can try to predict. This tree is then also added to the chain and the residuals should keep getting smaller whith every tree you add.
+Gradient boosting starts with a simple prediction it could be the mean but it is just a guess. This guess will have a certain error/residuals. Instead of making stumps like adaboost, gradient boost can make bigger trees, but you still set a max size. With these bigger trees it tries to predict the pseudo residuals of the data instead of the target. Then when this tree is made you have to scale the prediction down with a learning rate so the model has less impact on the final result. Then combine this tree with the original prediction, and train a new model based on the new residuals. You should have moved a bit into the right direction from the original prediction. This will give you new pseudo residuals the next tree can try to predict. This tree is then also added to the chain and the residuals should keep getting smaller with every tree you add.
 
-The idea is to find out what the best next tree is every time. I don't get this one :'(
+The idea is to find out what the best next tree is every time. I don't really get this one :'(
 
 ![img_5.png](img_5.png)
 
 For classification log loss is used and for regression square loss is used. 
 
-[Video going into more depth about ada boosting](https://www.youtube.com/watch?v=3CC4N4z3GJc)
+![Gradient boosting slide](gradient_boosting_slide.png)
+
+[Video going into more depth about gradient decent its a series](https://www.youtube.com/watch?v=3CC4N4z3GJc)
+
+There is also extreme boosting.
 
 ## Stacking 
 Trains many models in parallel and combines them by training on a meta model to output a prediction based on different weak models predictions. 
+
+So you choose some weak learners for instance KNN or SVM or a decision tree and then you also choose something as a meta model. Usually a neural network. Then you use the combined output of the weak learners that were trained in parallel as input to the strong learner. 
+
+![Stacking](stacking.png)
+
+You train the weak learners and the meta model on different parts of the data. So you split your data in **two folds**. The first fold is to fit the weak learners and the second fold is for fitting the meta model. Each of the weak learners then tries to make predictions for the observations in the second fold. This gives you the abbility to fit the meta model with the predictions made by the weak learners as input. 
+**Doing this does mean you only have half of the data**. But you can use **k-fold cross trainig** (similar to k-fold-cross validatoin) to get around by making sure that all the observations can be used to train the meta model.
+
+![k-fold-training](k-fold-training.png)
+
+In sklearn there is poor man staking and you just use a Voting classifier. 
+
+
+There is also hold out stacking and naive stacking. 
+The idea of this is that with naive you assume that each model in the stack is equally skillful. With hold out you give every model a weight based on their performance in a cross validation. 
+
+![Stacking](holdoutnaive_stacking.png)
+
+
+### Tree based models 
+You often use tree based models as the weak learners in the ensamble learning because the trees can model non-linear relationships. Trees are very interpretable (if they are not too big). Random forest are very robust. Gradient boosting often has the best performance with good tuning. Trees don't care about scaling they can work with any data so no feature engineering. 
