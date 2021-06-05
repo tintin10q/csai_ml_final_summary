@@ -356,9 +356,11 @@ These algorithms are known as **weak learners** because they might be sensitive 
 
 The problem that we always have with these models is figuring out how well they will work for unseen data. This problem is called **Estimating Generalization Error**. You can calculate this with: Generalization error = bias^2 + variance + noise
 
-**Error due to Bias:** Bias measures how far off in general these models' predictions are from the correct value.
+**Error due to Bias:** Bias measures how far off in on average these models' predictions are from the correct value.
 
  **Error due to Variance:** The variance is how much the predictions for a given point vary between different realizations of the model.
+
+**Noise:** The irreducible error. This is error that you can't do anything about. Noise in the data collection process for example.   
 
 ![Bias and variance typically trade off in relation to model complexity](biasvariancetradeoff.png)
 
@@ -505,3 +507,147 @@ The idea of this is that with naive you assume that each model in the stack is e
 
 ### Tree based models 
 You often use tree based models as the weak learners in the ensamble learning because the trees can model non-linear relationships. Trees are very interpretable (if they are not too big). Random forest are very robust. Gradient boosting often has the best performance with good tuning. Trees don't care about scaling they can work with any data so no feature engineering. 
+
+
+# Model evaluation
+How do you beter evaluate your models? Before you awnser that question you should ask what do we actually want to know when we evaluate our model? The answer is the **generalization performance** of the model. We actually don't care really how well the model does on the training data we care about if the training data will be enough to do well on unseen data. We can just get generalization performance of the model by testing it with unseen data. This is only really true for supervised learning because unsupperviced is more qualative.
+
+So far we have just done train/test data. There are few problems with this approach:
+
+- What is the % of test and spit? 
+- How do we know if the test data is exceptionally different from the training data?
+- How do we know whenther the model is overfitting the data?
+
+The answer to these questions is: We don't know. You have to determine on a case by case basis.  
+ 
+So can we do better? 
+
+## Cross validation
+
+### K-fold Cross Validation (again)
+
+You can also do k-fold cross validation we have seen this already in the other summary. The idea is making multiple models of your data with different parts being part of training and testing every time. k is the amount of models that you want to make. 
+
+#### Benefits of k-fold cv
+
+- Leaves less to luck, if you get really good or bad performance by luck then this will show in the results. One of the results will be an outlier. This can happen a lot with imbalanced data. 
+- Shows how sensitive the model is to the training data set. High variance between fold scores means high sensitivity to the training data. 
+
+#### Disadvantages of k-fold cv
+
+- Increases computational time because you train more models
+- Simple cross validation can result in class imbalance between training and test. This would lead to lower scores than you could really get. To get around this we can do **stratified cross validation**. This is where you make sure that there is no class imbalance in the different folds. 
+
+You can also set k to N and then you make the whole model with all the data and only test with one point. This as you know is called **leave one out validation**. This is very time consuming but this can be the **best method for small datasets** as it generates predictions on the maximum available data. Small datasets also decrease the training time again. This can also be useful to find out which items are regular and irregular from the point of view of the dataset. 
+
+### Shuffle split  
+The idea of this is that you do k-fold cross validation but which fold you use is picked at random. This:
+
+- Controls test-siz, training-size and number of iterations. You can again also do **stratified shuffle split cross validation** what a mouthfull. 
+
+![Shuffle Split](shuffle_split.png)
+
+### Cross validation with groups
+
+In cases that groups in the data are relevant to the learning problem you have to make sure that you **keep the whole group either in the test set or training set**. For instance with the machine learning take home we saw that some faces were in the dataset multiple times but with different expressions. In these cases it is important to keep the whole group of faces in either the test set or training set otherwise you get better or worse performance then is real. 
+Another example is with **time data** this is important to keep in order. 
+
+## Tuning
+Tuning is where you improve the models generalization performance by **tuning**\adjusting the hyperparameters. You can do this with grid search. Grid search is just a fancy word for training and testing with a lot of combinations of hyperparameters and using the best. You however should make clear before you do grid search which values you want to try. 
+**Simple grid search** is when you just try all the possible combinations of the hyperparameters you specified. 
+**Grid search with cross validation** use cross validation to evaluate the performance of each combination of parameter values. 
+
+The **problem with grid search** is that if you optimize the model based on the test data that the **test data is not independent anymore!** To fix this requires another final test set that you use with the best model you found with grid search. This is where the **validation set** comes in. You use the validation set to get a final score on the best model.
+
+When doing grid search you can save all the results you got for the different models and create a grid. This grid can be very usefull as ussually things that are close on the grid have similar performance.  
+
+![Grid search grid](grid_search_grid.png)
+
+## Metrics for classification
+
+For classification, you can get a couple of extra metrics besides training testing and validation score. These are:
+
+- **Accuracy:** How many data points were correctly classified? 
+- **Precision:** When a classification for a class, is it a true positive?
+- **Recall:** Of a certain class how many are correctly classified. Also called sensitivity. 
+- **F1 score:** A way of combining precision and recall. Defined as the harmonic mean of precision and recall.  
+
+How to calculate them:
+
+![Metrics for classification models](metricsforclassification.png)
+
+### Binary classification
+
+If you only use accuracy you can get some problems if you have imbalanced data. This is because you might get class A right all the time but class B only sometimes but if most of the data is class A you will still have a high accuracy. 
+
+![Accuracy can be a problem](problemwithaccuracy.png)
+
+What scores you attach to most value to depends on the **goal setting**. Lets say you have a pacemaker factory then you have to be sure that every pacemaker is 100% save, and you are ok with trowing away some pacemakers. Even some false negatives. Because economically speaking a false positive (working but looks broken) will cost you 10 euros while a false negative (broken but looks ok) will cost you a potential human live (wich will cost you more than 10 euros).
+
+Changing the threshold that is used to make a classification decision in a model is a way to adjust the trade-off of precision and recall for a given classifier. This gives you the precision recall curve. This is useful when you make a new model. 
+
+![Precision and recall curve](recal-precision-curve.png)
+
+So lowering recall gives you more precision but at some point recall drops off really quick. In this case a **precision zero** gives a good balance between precision and recall. These curves are better for imbalanced data then Roc curves. 
+
+Another way to look at this is the Reciever operating characteristics curve (Roc). Instead of reporting precision and recall it shows the false positive rate (FPR) against the tue positive rate (TPR). Here is how you calculate those: 
+
+![FPR and TPR formulas](roc-curve-formula.png)
+
+Then using that you can make the roc curve it looks like this:
+
+![Roc-curve](roc-curve.png)
+
+**The more area under the curve the better**. If you had complete random guesses the lines would go directly through the middle. This model is better and there is a lot of area under the curve. More better for balanced data. 
+
+### Multiclass classification metrics 
+
+How do you use these extra metrics for classification were you have multiple classes? You make a **confusion matrix** were you calculate the metrics for every class.
+
+They look like this:
+
+![Confusion matrix](confusionmatrix.png)
+
+This is the takehome assigment where the first collum is for image type 1 second collum for type 2 and thirth model is type 3. 
+
+This also gives you differnt types of F1 score options: 
+**Maco-averaged F1:** Average F1 scores over classes. So here you assume that all classes are equally important. 
+**Weighted F1** Mean of the per class f-scores weighted by their support
+**Micro-averaged F1** Make one binary confusion matrix over all classes then compute recall, precision once (all samples are equally important)
+
+You can calculate all the metrics its about what metric you attribute the most meaning towards. 
+
+## Metrics for regression models. 
+
+- **R2**: Easy to understand scale
+- **MSE**: Mean square error, easy to relate to input
+- **Mean or median absolute error**: More robust metrics meaning they are less influenced by the distrobution characteristics of the data. 
+- **Negative version**: Negative versions of the other metrics. Something that decreases if the model gets better. 
+
+You can also plot prediction or residual plots with regression models. 
+
+![Regression metrics plots](regression_model_metrics_plots.png)
+
+## Dealing with unbalanced data
+
+Imbalanced data is when you don't have the same amount of data per class/outcome.
+This can happen due to:
+- **Asymmetric cost** some labels being more important that others. 
+- **Asymmetric data** the distribution of your labels in the dataset is unbalanced.
+
+Most datasets follow a Zipfian distribution. The amount of the next class is about half of the current class. 
+How to deal with it:
+- Change the data by adding or removing samples. This is called under and over sampling. 
+- Change the training procedure.
+- Don't deal with it.
+
+With **random undersampeling** you lose data but this also makes training faster. With **random oversampling** you get more data so more chance at overfitting and slower training but at least you don't loose data. 
+
+You can also do an **edited nearest neighbors method**. The idea is to remove all the samples that are misclassified by a KNN from the training data. Cleans up the training data by removing outliers. 
+You can also do **condensed nearest neighbors method**. This iterativly adds points to the data that are misclassified by KNN and tries to do the oposite of edited. This way you get a dataset that focuses on the boundaries and so usually removes a lot of points. This is not really used a lot. 
+
+![Edited vs Condensed KNN](edited-condensed-knn.png)
+
+![Summary of video 8](summaryv8.png)
+
+Again the idea is to calculate multiple metrics and focus more on the ones that are important to your goals and needs.  
