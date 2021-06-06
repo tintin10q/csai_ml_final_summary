@@ -9,7 +9,21 @@ lang: "en"
 toc-own-page: true
 toc: true
 ---
+**Summary written by Quinten Cabo**
 
+### Disclaimer
+Although I have tried my best to make sure this summary is correct, I will take no responsibility for mistakes that might lead to you having a lower grade. If you do end up finding a mistake you should send me a message so I can update the summary :)
+
+### Support
+Do you appreciate my summaries, and you want to thank me then you can support me here:
+
+[PayPal](https://www.paypal.com/paypalme/quintencabo) or Tikkie 
+
+BTC: 1HjFv4NYiTwxdcnNpPEzaPY8vvYWXQnDgx
+ETH: 0xc0b430594A957A6A38203F45bd91f5d3568a39c6
+
+
+---
 # 3 types of models
 All the ML techniques can be put into another 3 categories.
 - Instance based classifiers
@@ -21,7 +35,7 @@ All the ML techniques can be put into another 3 categories.
 - Discriminative
     - Directly estimate decision rule/boundary
     - Decision trees
----
+
 # Reminder about probability theory 
 This is how bayies 
 ## Variables 
@@ -1106,5 +1120,8 @@ The result will be in the range of [-1, 1]. This is what the results mean:
 The tickness of the plot indicates how many points are in that cluster. Every horizontal line is the silhouette coefficient of one point in the cluster. 
 
 The mean silhouette coefficient is highest for n_clusters = 2 so this is the amount of clusters you should go for with this example. You can also see this because this is the only version were all clusters are above average. 
+
+
+This summary was completly written in markdown it is easy to write and you can make beatifull pdfs out of it with a tool named pandoc. 
 
 [comment]: <> (TODO, fix formatting ctrl shift alt l, check spelling, move figures into figures folder, maybe make some figures smaller.)
