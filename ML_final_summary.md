@@ -508,6 +508,7 @@ The idea of this is that with naive you assume that each model in the stack is e
 ### Tree based models 
 You often use tree based models as the weak learners in the ensamble learning because the trees can model non-linear relationships. Trees are very interpretable (if they are not too big). Random forest are very robust. Gradient boosting often has the best performance with good tuning. Trees don't care about scaling they can work with any data so no feature engineering. 
 
+We now discussed all the models. There is still more to the story however.
 
 # Model evaluation
 How do you beter evaluate your models? Before you awnser that question you should ask what do we actually want to know when we evaluate our model? The answer is the **generalization performance** of the model. We actually don't care really how well the model does on the training data we care about if the training data will be enough to do well on unseen data. We can just get generalization performance of the model by testing it with unseen data. This is only really true for supervised learning because unsupperviced is more qualative.
@@ -651,3 +652,111 @@ You can also do **condensed nearest neighbors method**. This iterativly adds poi
 ![Summary of video 8](summaryv8.png)
 
 Again the idea is to calculate multiple metrics and focus more on the ones that are important to your goals and needs.  
+
+
+# Preprocessing and Feature Engineering
+
+When you trow your data at a machine learning model as is you might not get optimal performance. You can do things to your data that do not change the sementics of your data while improving the generalization ability of your model.
+
+## Scaling
+We have seen this already a lot. The idea is the you scale the data to be on the scale. This makes it easier to compare data that is on scales with small and big numbers that is not so easy to convert. For instance km and hrtz. 
+
+### Standart Scaler
+With this method you calculate the z score for every data point. Effectively you calculate how far something is from the mean.  
+
+![z-score](z-score.png)
+
+This works well for non skewed data. 
+
+### Robuts Scaler
+The same formula but instead you assume a normal distrobution and you use the median instead of the mean and you use the interquartile range instead of the standart deviation. This is better for skewed data and deals better with outliers.  
+
+### Min Max Scaler
+Shifts data to the 0-1 interfall. Take the maximum value of your dataset and mimimum value of your dataset and just calculate where the other data points lie in between those and then you can get a 0-1 scale. Nice. 
+
+![Min max scaling](min-max-scaling.png)
+
+### Normalizer
+ojas;doilkajfthis method does not work for one feature but for aklopw;'/ojas;doilkajfgklo ,./nvbhll the features of a point. It does this by seeing all the features of a datapoint as a row or vector. The idea is then that you scale all the data of a point (one row) so that the norm (of the vector) becomes 1. Then you divide each point of the row by the norm. This is method is not used that often. Mostly used when the direction of the data matters and it could be helpfull for histograms. 
+
+> The norm of a vector is the square root of the squared elements of the vector. 
+
+### All techniques in one graph:
+
+![Scaling techniques](data-scaling-techniques.png)
+
+## Transforming the data
+Instead of just scaling the data you can also transform it. There are many techniques for this. Not only for machine learning also for stats in general. Most models perform best with normally distributed gausian data. Not every model for instance KNN does not most models benefit from it. 
+
+There are even methods to find the best method to transform your data to a Gaussian distribution. For instance Box-Cox and Yeo-Johnson transform. Both are power transform methods. The difference between these 2 methods is that Yeo-Johnson can also do negative numbers but therefore is also less interpretable. **With these techniques you can automatically estimate the parameters so that skewness is minimized and variance is stabilized.** Here is a visualization of the different techniques: 
+
+![Univariate transformations](univeraiate-transformations.png)
+
+These methods are really great because you can just almost blindly transform your data to a normal distribution. You could choose your own parameters to make your data more interpretable. For instance in this case a transformation to the log scale is apparently better: 
+
+![Log transformation](log-transformation.png)
+
+## Bining
+Binning (also known as discretization) is a preprocessing method to make linear models more powerful on continuous data. The idea is to separate feature values into n categories that are equally spaced over the range of values. You do this by separating the features into n categories by a single value (usually the mean) and then you **replace all values within a category by a single value**.
+This is effective for models with only a few parameters such as regression, but it is not effective for models with a lot of parameters like decision trees as can be seen in the picture below. 
+
+![Binning in action with linear regression and a decision tree](binning.png)
+
+## Missing values imputation
+Missing values imputation is about dealing with missing values in the dataset. With real data there are various reasons why data would be missing.  Missing values might be represented in different ways common missing value representations are **None, blank, ~~0~~, NA, Na, NaN, Null, undefined ......** You should **NOT** use numbers to indicate missing data as this might not be picked up on. Always use strings or something else inconvienient. You could just trow away the data that contains missing values, but we can do better than that. You want to do this because it is sad to throw away a whole vector of data only because one scalar is missing. 
+
+This is how it would look like:
+
+![Missing values](missing-values-imputation.png)
+
+We can make a model to impute (predict) the missing values. Different techniques for this include:
+- **Mean / median** replace missing values with median or mean of the data. Not a great technique not very flexiable. 
+- **KNN** use the average of k neighbors feature values. This is much more flexible. The mean is basicaly k = n. 
+- **Model driven** using another model to impute the values like random forest. 
+- **Iterative** using a regression model with all features expect one to predict the missing features and then do this for all the missing features. You can use the recited values for the next values.
+
+![Data imputation](data-imputation.png)
+
+## Dealing with categorical data
+Data is often not nice and numeric but categorical. Child/adult boy/girl/other True/False. Data can be categorical - ordinal - interval - ratio. We have seen this before there are ways to deal with this. Usually by converting the categorical data to a number. Remember you don't have to do this for decision trees. To change the categorical data into numbers you can use **one hot encoding** (making multiple boolean features for each possible category), or **a count based encoding** using an aggregation (how much something occurs). Good for high cardinality (a lot of possible classes). We saw this in other courses already.
+
+## Feature selection
+Feature selection is choosing what features you want to use when training your models. You do this to:
+- Avoid overfitting
+- Lower compute time
+- Less storage for model and dataset
+
+There are 3 different strategies discussed. 
+
+### Univariate statistics 
+With this feature selection technique you look at each feature individually and **remove features** that do not have a **significant relationship** to the target. You can either say keep 20 features with the highest confidence, or you could say keep the features with a confidence value higher than a threshold. How to get confidence is related to the ANOVA method. The idea of this technique is to keep features that have a high statistical significance to the target. You can use f-value or **mutual information** (not linear). Or you can calculate both. 
+
+### Model based selection
+This is for getting the best fit for a particular model. Ideally you do an exhaustive search over all possible combinations but this is not feasible as it would take too long. Thats why you use heuristics. But this is lasso regression or linear models, tree based models. You can also do **multivariate models** those are linear models that assume linear relation. The idea of this technique is to just try a lot of combinations of features and find out based on the results and heuristics which combination works the best. 
+
+### Iterative approach
+Start with the most important feature and keep adding until you have the amount of features that you want. This is used more for statistical models. You can also do this backwards were you drop features the least important features until you have the amount you need.
+This method is quite computationally expensive as every time you try leaving out a feature you have to train again. 
+
+You can rank the features using RFE -> Recursive feature elimination and selection. This is doing the iterative approach backwards and forwards to come to the best combination of features. 
+
+## Dealing with Text data
+Most machine learning models really like their data to be numerical but when you get text data this gets more difficult and preprocessing steps get more involved. How do you represent Text data in a matrix format? Text data has no predefined features. The most common way to deal with this problem is to use **Bag of words**. 
+
+![The bag of words technique steps](bagofwords.png)
+
+Before you do anything you need to **tokenize** your raw text. This means turning the raw text into a list of the raw elements of the text. Tokenizing is a whole subject in its own right. Are . , ; " < > ' tokens for instance? You could do **stemming** where you reduce words to their root like walking to walk. You could do **lemmatization** were you replace words with words from language databases. You could **restrict the dataset** by removing words that only occur once to reduce matrix size. You could remove words with low semantic content like the, is, a. Or you could not do any of these things. Do you split the words as 1 word or do you try parts of sentences? What about misspelled words? All dials you can tune in the tokenizing step. Tokenizing is easy to do but hard to do well. 
+
+Once you have tokenized your all your data you have built a vocabulary with the tokens. Then the next step is to create a sparse matrix encoding out of this vocabulary. Where for every token you say if it appears in a certain document or not. You could also use count instead of boolean to represent how often a word appears in a document. 
+
+> A document is a very general term that can mean many things. It could mean a paragraph, different chapters, different files, different sentences etc.
+
+Instead of boolean or count you can also use the **TF-IDF** value of a token. This will tell you how informative a certain token is for a particular document. 
+
+Term Frequency (TF) = Number of times a token appears in a document
+Inverse Document Frequency (IDF) = log(N/n). Where, N is the number of documents and n is the number of documents the token has appeared in. Rare tokens have high IDF and frequent words have low IDF. Thus, this highlight words that are distinct. This kind of leans into information theory where the things that are less common actually give you the most information. 
+You calculate TF-IDF as TF*IDF.
+
+![TF-IDF example](TF-IDF.png)
+
+As you see the word day has a higher score then beautiful.
