@@ -907,3 +907,204 @@ Should be at least 250.
 [Here is a website to play with t-sne its pretty fun](https://distill.pub/2016/misread-tsne/) https://distill.pub/2016/misread-tsne/ 
 
 # Clustering
+Clustering is finding natural groups in data. You don't know the groups beforehand so this is an **unsupervised learning method**. This can be a hard problem because you can cluster in many ways. For instance by choosing a different amount of groups/clusters that you want:
+
+![Clustering with different amount of clusters](clustering_is_hard.png)
+
+[Humans are actually really good at these types of problems](https://en.wikipedia.org/wiki/Pattern_recognition_(psychology)) but it is really hard to tell a computer how to do this. 
+
+## Goals of clustering 
+- Data exploration 
+  - Are there coherent groups?
+  - How many groups are there?
+- Data partitioning 
+  - Divide data by group before further processing
+- Unsupervised feature extration 
+  - Derive features from clusters or cluster distances
+
+We can achieve these goals with these techniques:
+- K-means
+- Heirachical clustering
+- Density based Techniques
+- Gaussian Mixture models
+
+## K means
+The idea of k means clustering is to seperate samples into **k groups of <u>equal</u> variance**. So to do K-means clustering you need to know how much clusters you want. There are techniques to make good decisions about this. 
+
+![K means clustering](k-mean-clustering.png)
+
+The algorithm goes like this:
+1. Choose the number of clusters k (a)
+2. Randomly choose initial positions of K centroids (b)
+3. Assign each of the points to the "nearest centroid" (c)
+   - This depends on the distance measure. Manhattan or Euclidean etc.
+4. Recompute the centroid positions (d)
+5. If solution converges stop otherwise go back to step 3. (e)
+6. Clustering is done and data is divided into clustering (f)
+
+You recompute the centriods (step 4) by finding the local minimum of minimizing squared distances. 
+
+![Formula for minimizing squared distances](formula_minimizing_squared_distances.png)
+
+In English this means moving the centroid into the direction that will make the distances between the points in the cluster, and the centroid the smallest.
+
+When does a point belong to a certain cluster? **A point belongs to the cluster of the centroid that's the closest to the point**. Based on this rule you can draw decision boundaries around clusters. This is called a **Voronoi-diagram**. Clusters/decision boundaries are always convex in space meaning a shape where all of its parts point outwards.  
+
+[Cluster decision boundaries](clustervoronoidiagram.png)
+
+Things can go wrong like this: 
+
+![K-means clustering going wrong](k-mean-clustering-going-wrong.png)
+
+Because K-mean clustering is very dependent on were you start with the centriods its a good idea to try cluster  multiple times (default) with different starting positions. For large datasets K-means initialization (calculating the distances) can take longer than the actual clustering (Minimizing the distance). For this there is MiniBatchKmeans.  
+
+### MiniBatchKMeans 
+MiniBatchKMeans uses mini batches to reduce the computation time while still attempting to optimising the same objective. It works like this:
+
+1. Draw samples randomly from the dataset to form a minibatch 
+2. Assign the nearest centroids
+3. Update the centroids by using a convex combination of the average of the samples and the previous samples assigned to that centroid. 
+4. Perform above till convergence or iteration limit. 
+
+Turns out that this is much faster and almost the same results.
+
+## Hierarchical clustering
+The idea behind hierarchical clustering is to have a series of partitions from a single cluster containing all the data points to N clusters containing 1 data point each. 
+
+In simpler words you start with all points being their own independent cluster and each iteration you **merge the 2 closest points together** into a new cluster. Keep going until you have the amount of clusters you want or until each point belongs to the same cluster.  
+
+![Hierarchical clustering in action](hierachical_clustering_in_action.png)
+
+You can also visualize this as a tree were each node of the tree is a merger of the nodes up to that point forming a new cluster.
+
+![Hierarchical clustering](hierachical_clustering.png)
+
+You can do even better by making special plots called **dendrogram** that visualize the arrangement of the clusters produced. 
+
+![A dendogram](dendogram.png)
+
+This helps to decide where to stop merging and also keeps a nice history of merges. 
+
+There are 4 ways to decide on how to cluster:
+
+- **Single linkage clustering**: Distance between pairs of points 
+- **Complete linkage clustering**: Distance between the farthest pairs of points 
+- **Average linkage clustering**: Mean distance of all mixed pairs of points
+- **Ward clustering**: Minimises sum of squared differences within all clusters, this leads to more equal clusters (default in sklearn)
+
+![Different agglomerative cluster techniques](hclustertechniques.png)
+
+Here are different results when you use the different clustering techniques:
+
+![Results of different hierarchical clustering techniques](hclusterresults.png)
+
+### Pros and cons 
+- Can restrict to input topology given by any graph for example neighborhood graph
+- Fast with sparse connectivity
+- Some linkage criteria can lead to very imbalanced cluster sized (can be pro or con)
+- Hierarchical clustering gives more holistic view, can help with picking the number of clusters for other techniques
+
+## Density based clustering methods (DBSCAN)
+Density-Based Spatial Clustering of applications with noise (DBSCAN) is a clustering technique were you devide the datapoints into 3 groups based on hyperparameters called **Density** this is the number of points within a specified radius r. r is usually called **epsilon**. 
+The 3 groups are: 
+- **Core points**: Points with more than a specified number of points (min_samples) within epsilon. This includes samples inside the cluster 
+- **Border points** Points with fewer then min_samples within epsilon, but is in the neighborhood of a core point. So one of the points that makes another point a core point
+- **Noise points**: Any point that is not a core or border point. 
+
+So if a point is close to a lot of other points it is a core point. If a point contributed to making a point a core point it becomes a border point. All the other points are noise points.
+
+![DBSCAN](DBSCAN.png)
+
+### DBSCAN Algoritm 
+1. Start with a core sample/point 
+2. Recursively find neighbors that are also core points and
+add them to the cluster
+3. Also add samples within epsilon that are not core points (but don’t recurse) this means adding the border points but don't search further with those points
+4. If no other points are “reachable”, pick another core point to start a new cluster.
+5. Repeat till you went trough all core points
+6. Remaining points are labeled outliers/noise points 
+
+![DBSCAN in action](DBSCAN_in_action.png)
+
+#### Pros:
+- Allows complex cluster shapes 
+- Can detect outliers
+  - Good for spam, Maybe you are more interested in the noise points  
+- You don't need to say how many clusters you want!
+- Needs only two parameters to adjust, 
+- Can learn arbitrary cluster shapes 
+
+#### Limitations:
+- Varying densities because your cluster size varies 
+- Is slower with High-dimensional data
+- Epislon is hard to pick (can be done based on number of clusters though)
+
+All with all this is a really good technique and can even predict hard clusters like this no problem. 
+
+![Hard to predict cluster](hardcluster.png)
+
+## Mixture methods
+The idea of a mixture model is that you want to find a generative model. This means finding a the parameters for a function p(x).
+
+This method makes a couple assumptions
+- Data is mixture of small number of known distributions 
+- Each mixture component distribution can be learned "simply"
+- Each point comes from one particular component
+
+The goal is to learn the component paramets and weights of the components. 
+
+![P formula mix models](p_formulamixmodels.png)
+
+### Gaussian Mixture models
+Here you assume that each component is created by a Gaussian distribution and there is a multinomial distrobution over the components. 
+
+Here is is the big scary formula:
+
+![Gaussian mixture model formula for p(x)](big_scary_formula.png)
+
+The parameters are learned by a process called **non-convex optimization**. You make a lot of distributions for each potential cluster and then merge them together based on how good they are. Each distrobution you gerenate is called a **component**. This is done with an algoritm called the **EM algorithm**. The EM algorithm assigns points to the components and then calculates the mean and the variance. You initialize this method with K-means and then you do random restarts.
+
+This gives you different distributions each time. The idea is that you merge the distributions you got into a final distribution. 
+
+![Merging found distributions](mergemixedcluster.png)
+
+This model needs to know the amount of clusters that you want. The nice thing with mixture models is that you can get a variance for each cluster.
+
+![K-means vs GMM](gaussianmixturevskmeans.png)
+
+## How to evaluate unsupervised learning models
+This is a problem because unlike with supervised learning there is no source of truth. There are a lot of ways to this but the 2 ways highlighted in the course are:
+
+### Elbow plot
+This is a way to find out how many clusters you should ask for. This computes the sum of squared distances (SSE) between data points, and their assigned clusters centriods. If you do this you will get a graph like this: 
+
+![Elbow plot](elbowplot.png)
+
+Pick the desired number of clusters at the spot where SSE starts to flatten out and forming an elbow. 
+
+### Silhoute Coeffcient 
+Another way to find out how many clusters to ask for is silhouete coefficient. For this technique the idea is that for each sample:
+1. You compute the average distance from all the data points in the same cluster (ai)
+2. Compute the average distance from all data points in the closest cluster 
+3. Then you compute the silhoutte coefficient:
+
+![Formula for silhouette Coefficient](silhouette_coefficient_formula.png)
+
+You do this for every datapiont. So every datapoint gets a silhouette coefficient score.  
+
+The result will be in the range of [-1, 1]. This is what the results mean:
+- If 0: The sample is very close to the neighboring clusters
+- If 1: the sample is far away from the neighboring clusters 
+- if -1: The sample is assigned to the wrong clusters
+
+#### Examples:
+
+![Silhouette in action k = 2](silhouette2.png)
+![Silhouette in action k = 2](silhouette3.png)
+![Silhouette in action k = 2](Silhouette4.png)
+
+The tickness of the plot indicates how many points are in that cluster. Every horizontal line is the silhouette coefficient of one point in the cluster. 
+
+The mean silhouette coefficient is highest for n_clusters = 2 so this is the amount of clusters you should go for with this example. You can also see this because this is the only version were all clusters are above average. 
+
+[comment]: <> (TODO, fix formatting ctrl shift alt l, check spelling, move figures into figures folder, maybe make some figures smaller.)
