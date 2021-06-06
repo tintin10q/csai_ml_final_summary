@@ -721,10 +721,26 @@ We can make a model to impute (predict) the missing values. Different techniques
 Data is often not nice and numeric but categorical. Child/adult boy/girl/other True/False. Data can be categorical - ordinal - interval - ratio. We have seen this before there are ways to deal with this. Usually by converting the categorical data to a number. Remember you don't have to do this for decision trees. To change the categorical data into numbers you can use **one hot encoding** (making multiple boolean features for each possible category), or **a count based encoding** using an aggregation (how much something occurs). Good for high cardinality (a lot of possible classes). We saw this in other courses already.
 
 ## Feature selection
-Feature selection is choosing what features you want to use when training your models. You do this to:
+Feature selection is choosing what features you want to use when training your models. Why not just use all the features you have? There are good reasons not to do this.  
+
+#### Benefits of feature selection/dimension reduction: 
 - Avoid overfitting
 - Lower compute time
+- Avoid curse of dimensionlaty 
 - Less storage for model and dataset
+- Reduced space required to store the data
+- Less dimensions makes models faster to compute
+- Some algorithms like KNN don't perform well with a high dimension
+- Takes care of correlations by removing redundant features. For instance time run and calories burnt both sort of say the same thing
+
+### The curse of dimensionality
+The curse of dimensionality is the fact that adding more and more features will give diminishing returns on the model performance. You will eventually even get negative performance by adding more features.
+
+![Curse of dimensionality](curseofdimensionality.png)
+
+After you have reached the optimal number of features your performance decreases by adding more features. This is because of overfitting because adding more features exponentialy increases the volume of the feature space.
+
+This is a trade of because we want informative features but having too much will cause overfitting. As such the features you choose should be as informative as possible. 
 
 There are 3 different strategies discussed. 
 
@@ -760,3 +776,134 @@ You calculate TF-IDF as TF*IDF.
 ![TF-IDF example](TF-IDF.png)
 
 As you see the word day has a higher score then beautiful.
+
+# Dimensionality reduction
+Dimensionality reduction is the first **unsupervised technique** that we got a look at. This means this technique does not have targets to optimize the models. This is more of a data preprocessing method. The idea of dimensionality reduction is to represent high dimensional data with lower dimensional data with less features. But the features that are there will summarize all the other data. A good example were this is useful is images. Only if you have an 8 x 8 pixel image this is already 64 features. If you have a 1280x720 image you have 77600 features. The possible **combinations** increase exponentially. This becomes hard to deal with and besides that the **curse of dimensionality** comes knocking on your door. Do you really need to take all the individual pixels into account anyways? Reducing the dimensionality of your data also makes it much easier to visualize. 
+
+There are 2 discused ways of doing this: 
+
+## Principal components analysis (PCA)
+
+PCA operates on the features without labels and thus is an unsupervised learning method. PCA threats each feature as an axis of an N-dimensional coordinate system. Then it rotates the XY coordinate system to turn the 2 dimensional data into 1 dimensional data. This only works if the features are highly correlated and form a nice vector together. 
+
+In short this is what happens:
+
+![Pca summary](pca4.png)
+
+### Longer Example: 
+If you have 2 features that are highly correlated we can reduce them to 1. 
+
+![Correlated features](pca1.png)
+
+These features are nicely correlated. Which means you could make a 2 vectors through the points with a 90 degree angle like this:
+
+![Pca components](pca2.png)
+
+Then you rotate the vectors to be in line with the x and y axis. This way you make the line almost 1d instead of 2d.
+
+![Pca components rotated](pca3.png)
+
+So now you have 2 components. So we put in 2 features and got 2 other features back. But now these 2 features are a combination of the 2 original features: 
+
+- Principle component 1 = a * feature1 + b * feature2
+- Principle component 2 = c * feature1 + d * feature2
+
+a, b, c and d are related to the **Pearson Coefficient** of the lines and the coralation of the points. The first component explains as much variance as possible of the dataset. The second component tries to explain remaining variance in the dataset and is uncorrelated to the first component. You start the line in the middle of your cloud of points.  
+
+If you look at the last plot you see that now the data is almost completely described by principal component 1. Principle component 2 describes the noise. **Therefore we can discard principale component 2.**
+
+This leaves is with one feature! 
+
+
+If you remove the second component you get a line like this: 
+
+![PCA overfiew](pca-overvief.png)
+
+So now we have a machine that can combine 2 corralated features into 1. 
+
+### How do you compute PCA
+1. Take the whole dataset and ignore the labels 
+2. Compute the mean and covariance 
+3. Center and scale the data (PCA is sensative for scaling)
+4. Get the eigen vectors and eigen values from the covariance matrix or correlation matrix, or perform a singular vector decomposition
+5. Sort eigenvalues in descending order
+6. Choose the k eigenvectors that correspond to the eigenvalues where k is the number of dimensions of the new feature space. (So k <= d where d is the orginal number of dimensions)
+7. Construct the projection matrix W that will be used to transform the data. 
+   
+> A projection matrix is a matrix out of the top k eigenvectors 
+
+If you want to do more than 2 features you just rotate the coordinate system in such a way that the projection of the data of the first principal component has the largest variance, the second principal component has the one-but the largest variance and so on..... 
+
+The first couple principal components will be the most relevant for classification.
+
+This is how pca lookes when you do it to an image:
+![Pca when applied to images](pca-on-images.png)
+
+#### How much components to keep?
+This is one of those case by case questions, it depends on the amount of training data you have, the complexity of the decision boundaries and what classifier you are using. 
+
+A good measure is the **total explained variance** by the new data. The more components you keep the more variance is explained by the data. However, each component you add will give deminishing returns on how much extra variance you explain. Try to choose a k that explains an amount of the variance that you are happy with. My advise is at least 90 to 95 percent of total variance explained. 
+
+## Non negative Matrix factorization (NMF)
+The idea of this is to take the data and find the **latent space**. Latent means hidden. This will give you smaller data. **The latent features have to be nonnegative**. You find the space with Matrix factorization. 
+
+### Matrix factorization is:
+
+![Matrix factorization](matrix_factorization.png)
+
+The idea is to represent the original **X** matrix in a latent space. The latent space contains a hidden simpler compressed representation of the data. In the latent space similar features are closer together. Here is an example with numbers in matrix and latent space:
+
+![Latent space example](latent-example.png)
+
+You can then multiply the latent space (A) with weights (B) to get your original data back (X). 
+
+#### Why use NMF?
+- Postive weights can be easier to interpet
+- No cancellation like PCA
+- No sign ambiguity like PCA (what does the - mean?) 
+
+NMF can be viewed as soft clustering each point is positive linear combination of the weights. 
+
+#### Downsides of NMF
+- Can only be applied to non negative data (images, text)
+- Sometimes componets are not interpretable
+- Non-convex optimization, requires initialization
+- Can be very slow
+- Not orthogonal (You dont really know were the componets are)
+
+## PCA VS NMF
+![PCA VS NMF](pcavsnmf.png)
+
+## Manifold learning 
+Manifold learning is **dimensionality reduction for data visualization**. The idea behind manifold learning is to make a complex mapping of the data also called the **underlying manifold structure** that can then be brought down to a lower dimension using dimensionality reduction to be visualized. This seems to work really well. **This technique is only for visualizations** as the axes of the plots don't correspond to anything in the input space, and these mappings can often not transform new data. But they give pretty pictures!
+
+There are multiple ways of doing this some of which can also be used for other things then visualization but the one talked about in the lecture was T-distributed Stochastic Neighbor Embedding. Actually a technique made by someone from tilburg University so that's cool. 
+
+![T-distributed Stochastic Neighbor Embedding](t-distrobuted_stochastic_neighbor_embedding.png)
+
+By minimizing the probabilities of difference you make sure that points that are close together in the high dimensional space are also close together in the low dimensional space. 
+
+You start with a random embedding and then iteratively update points to make "close" points close. You do this with a learning rate. The global distances are less important it is more about neighbours. This technique is good for getting a coarse view of the topology of your data and can be good for finding intresting datapoints. 
+                 
+### t-SNE VS PCA
+
+![t-SNE vs PCA](t-sne_vs_pca_manifold.png)
+
+The values on the t-sne axis have no meaning
+
+### Tuning t-SNE
+There are a lot of hyperparameters for t-SNE
+
+- **n_components** (default: 2): Dimension of the embedded space. 
+- **perplexity** (default: 30): The perplexity is related to the number of nearest neighbors that are used in other manifold learning algorithms.
+Consider selecting a value between 5 and 50. 
+- early_exaggeration** (default: 12.0): Controls how tight natural clusters in
+the original space are in the embedded space and how much space will be between them. 
+- **learning_rate** (default: 200.0): The learning rate for t-SNE is usually in
+the range (10.0, 1000.0). 
+- **n_iter** (default: 1000): Maximum number of iterations for the optimization.
+Should be at least 250.
+  
+[Here is a website to play with t-sne its pretty fun](https://distill.pub/2016/misread-tsne/) https://distill.pub/2016/misread-tsne/ 
+
+# Clustering
