@@ -12,34 +12,37 @@ toc: true
 **Summary written by Quinten Cabo**
 
 ### Disclaimer
-Although I have tried my best to make sure this summary is correct, I will take no responsibility for mistakes that might lead to you having a lower grade. If you do end up finding a mistake you should send me a message so I can update the summary :)
+Although I have tried my best to make sure this summary is correct, I will take no responsibility for mistakes that might lead to you having a lower grade. If you do end up finding a mistake you should send me a message, so I can update the summary :)
 
 ### Support
 Do you appreciate my summaries, and you want to thank me then you can support me here:
 
-[PayPal](https://www.paypal.com/paypalme/quintencabo) or Tikkie 
+[PayPal](https://www.paypal.com/paypalme/quintencabo) or [Tikkie](https://tikkie.me/pay/cb1f5p56rumbk6gpcc8o)
 
 BTC: 1HjFv4NYiTwxdcnNpPEzaPY8vvYWXQnDgx
 ETH: 0xc0b430594A957A6A38203F45bd91f5d3568a39c6
 
 
 ---
-# 3 types of models
+# Machine Learning CSAI Final Summary
+
+## 3 types of models
 All the ML techniques can be put into another 3 categories.
 - Instance based classifiers
     - Uses observations directly without models
     - The only one we have that does this is KNN
 - Generative
-    - Build a generative statistical model by assuming data comes from a normal distrobution
+    - Build a generative statistical model by assuming data comes from a normal distribution
     - Bayes classifiers
 - Discriminative
     - Directly estimate decision rule/boundary
     - Decision trees
 
 # Reminder about probability theory 
-This is how bayies 
+This is how Bayes works.
+
 ## Variables 
-The basis of baiyes probability theory lies with **random variables** that represent events in the future that could happen. These refer to an element whose status is unknown. For example ```A = "it will rain tomorrow"``` 
+The basis of Bayesian probability theory lies with **random variables** that represent events in the future that could happen. These refer to an element whose status is unknown. For example ```A = "it will rain tomorrow"``` 
 
 The **domain** is the set of values a random variable can take, also to be seen as the set all the possible answers to a question, or all the possible events that could happen. This can be the following types:
 **Binary**: Will it rain? (yes, no)
@@ -61,12 +64,12 @@ P() has these rules:
 
 ![Set Theory explanation](./setex.png)
 
-How likely one certain outcome is, is called the **prior**. So the the outcome of a P() is a prior. For example:
+How likely one certain outcome is, is called the **prior**. So the outcome of a P() is a prior. For example:
 - P(Rain tomorrow) = 0.8
 - P(No rain tomorrow) = 0.2 
 The probability of at least something happening is 1. So the sum of P() for all possible outcomes is one.
 
-So a prior is the degree that you believe a certain outcome before it happens and one is chosen. If you have no other information. 
+So a prior is the degree that you believe a certain outcome before it happens and one is chosen if you have no other information. 
 
 ## Example
 
@@ -91,7 +94,7 @@ Now it is very important if the variables are independent or not. If something i
 ## Conditional probability
 In some cases given knowledge of one or more random variables we can improve our prior belief of another random variable. As soon as you know that variables are not independent you need to talk about conditional probability.  
 
-This is where `|` comes in. (A = 1|B = 1) this asks the question of:
+This is where `|` comes in. (A = 1|B = 1) this asks:
 > What is the chance that if B happens A also happens the outcomes where A is 
 true if B is true. You could say this as the chance of A given B. 
 
@@ -100,7 +103,7 @@ The joint distribution can be specified in terms of conditional probability.
 > You can then combine these two to get the joint probability.
 > It looks like this: `P(x,y) = P(x|y)*P(x)`
 
-## Bayes Probability Theorom
+## Bayesian Probability Theorem
 
 It turns out that the joint probability of A and B is the prior of A times the conditional probability of A and B. So `P(a,b) = P(a|b)*P(a)`
 
@@ -119,13 +122,13 @@ Now if we put this back into ML terms. x = features, y = label.
 We want to know the prior of passing your exam if your teacher is Larry. We need the following. Let's also replace the P(x) and alike with semantics for this.
 > P(x) = P(Larry) = 28/80 = 0.35
 > P(y) = P(Yes) = 56/80 = 0.7 
-> P(x|y) = P(Larry|Yes) = 19/56 = 0.34 (Prior of your teacher being larry if you passing.)
+> P(x|y) = P(Larry|Yes) = 19/56 = 0.34 (Prior of your teacher being Larry, and you're passing.)
 
 Ok so with that we can calculate P(y|x) like P(y|x) = `P(y|x) = P(|y)p(x)/p(y)` or `P(Yes|Larry) = P(Larry|Yes)*P(Larry)/P(Yes)`
-So if we write it out: `P(Yes|Larry) = 0.34*0.7/0.35 = 0.68` Meaning the final probabilty of passing the exam if your theater is larry is 0.68
+So if we write it out: `P(Yes|Larry) = 0.34*0.7/0.35 = 0.68` Meaning the final probability of passing the exam if your theater is larry is 0.68
 
 # Naive Bayes 
-With a the rules from above you can make a machine learning classifier. It is called Naive Bayes classifier. This is a **generative** based classifier. Meaning it builds a generative statistical model based on the data. This classifier is based on the predictions of that model. We do this by just giving the things below we saw before new names.
+With the rules from above you can make a machine learning classifier. It is called Naive Bayes classifier. This is a **generative** based classifier. Meaning it builds a generative statistical model based on the data. This classifier is based on the predictions of that model. We do this by just giving the things below we saw before new names.
 
 >- P(y|x): The posterior probability of a class (label) given the data (attribute) -> The probability of the label given the data
 >- P(y): The prior probability of a label -> How likely is a certain class?
@@ -134,7 +137,7 @@ With a the rules from above you can make a machine learning classifier. It is ca
 
 We are after P(y|x) the label given the data. We can calculate this with P(y|**x**) = P(**x**|y)*P(y)/P(**x**).
 
-In practice, you will always have multiple features so it looks like P(y|**X1** ... **Xn**)
+In practice, you will always have multiple features, so it looks like P(y|**X1** ... **Xn**)
 
 This classifier is called a **Naive** Bayes because it assumes that all the features are independent. This makes it so you P(**X1**|y, **X2**, **X3**...**Xn**) = P(**X1**|y)
 
@@ -146,15 +149,15 @@ P(y|X1...Xn) =
 
 His means multiply P(y) with all the priors of your classes and divide by the joint prior of all the data. Then you take the class with the highest **posterior probability**. This is what you choose as your prediction.
 
-> **posterior probability** is the prior * likelyhood or the P(y) * P(**x**|y) of the equation. So we want the highest P(y|x)
+> **posterior probability** is the prior * likelihood or the P(y) * P(**x**|y) of the equation. So we want the highest P(y|x)
 
 ### Non discrete data
-So far we assumed that the data is always discrete but usually with machine learning this is not the case. The data is often continues. For these types of data we often use a **Gausian model** that assumes your data is normally distributed! In this model we assume that the input X is taken from a normal distribution X = N(mean, sigma). 
+So far we assumed that the data is always discrete but usually with machine learning this is not the case. The data is often continues. For these types of data we often use a **Gaussian model** that assumes your data is normally distributed! In this model we assume that the input X is taken from a normal distribution X = N(mean, sigma). 
 
 ## Bayesian Regression
-So far we only looked at Bayesian classification. You can also do Bayesian regression. Take linear regression and just put it in the Bayesian model. You base the predictions on probability instead of a single point. You can optimise these with gradient decent even still. and there are multiple best values. You are more after the posterior distribution for the model parameters.  
+So far we only looked at Bayesian classification. You can also do Bayesian regression. Take linear regression and just put it in the Bayesian model. You base the predictions on probability instead of a single point. You can optimise these with gradient decent even still. There are multiple best values. You are more after the posterior distribution for the model parameters.  
 
->**Linear regresssion reminder:**
+>**Linear regression reminder:**
 > 
 > y(x) = **W**^T**x** (frequentst view )
 >
@@ -163,15 +166,15 @@ So far we only looked at Bayesian classification. You can also do Bayesian regre
 > <u>Predicted - what you found</u>
 
 With bayesian linear regression you formulate linear regression using probability distributions rather than point estimates. This assumes that y was drawn
- from a probability distribution. The sklearn linear regression can actually use baysion regression for regression as well as it is build in.  
+ from a probability distribution. The sklearn linear regression can actually use Bayesian regression for regression as well as it is build in.  
 
-![Baysian Regression](baysianregressionformula.png)
+![Bayesian Regression](baysianregressionformula.png)
 
 So this is just linear regression in Bayesian pretty cool if you ask me its like a whole another way of looking at things.
 
 ### Different scikit learn bayes models
 There are different implementations of native bayes. The one you want to use depends on the type of your data.
-- Gaussian Naive Bayes classifier (FaussianNB())
+- Gaussian Naive Bayes classifier (GaussianNB())
   - Assumes that features follow a normal distribution 
 - Multinomial Naive Bayes 
   - Assumes count data
@@ -198,9 +201,9 @@ This technique is like having a lot of if/elif/else statements. You get the labe
 
 ![Left or right](simple%20tree.png)
 
-> Because the tree is made out of binary questions you don't have to do anything to your data to use it. So you don't have to convert categorical data to something numerical or anything like that as the tree can just directly ask something about a categorical feature. For instance, you can just ask: is the color red? Yes or No. The same thing for numerical values. 
+> The tree is made out of binary questions about your data, so you don't have to do anything to your data to use this technique. So you don't have to convert categorical data to something numerical or anything like that as the tree can just directly ask something about a categorical feature. For instance, you can just ask: is the color red? Yes or No. The same thing for numerical values. 
 > 
->This is really great as it reduces the preprocessing and it is intuitive.  
+>This is really great as it reduces the preprocessing, and it is intuitive.  
 
 Decision trees are a bit like playing guess who:
 
@@ -210,11 +213,11 @@ If you go left you might get to a different question as when you would have gone
 
 ![More complicated tree](complicated_tree.png)
 
-> All decision boundaries are perpendicular to the feature axes, because at each node a decision is made about one feature only. So if you see strait lines it is probably a decision tree.
+> All decision boundaries are perpendicular to the feature axes, because at each node a decision is made about one feature only. So, if you see a decision boundary with only strait lines, it is probably a decision tree.
 
-The goal behind decision trees is to get the best branching. You get the best branching based on the order you check the features and the thresholds you check for.
+The goal behind decision trees is to get the best branching. You get the best branching based on the order you check the features, and the thresholds you check for.
 
-You want to split as much "area" as possible like this:
+You want to split as much "area" as possible:
 
 ![Each test/node layer in the tree splits your data further. Left is dept 1, Right is depth 2](tree_boundary.png) 
 
@@ -227,7 +230,7 @@ In this case what is better X1 or X2?
 
 ![X1 or X2](x1-or-x2tree.png)
 
-If you split by asking is X1 true of false and it is true then you immediately get the good y. This is the most error reduction with the least depth. As in that case there are still 0 remaining wrong classified outcomes anymore. Thus splitting by X1 first is better. This will then also be indicated by those three measures.
+If you split by asking is X1 true of false, and it is true then you immediately get the good y. This is the most error reduction with the least depth. In that case there are still 0 remaining wrong classified outcomes anymore. Thus splitting by X1 first is better. This will then also be indicated by those three measures.
 
 ## Choosing how to split your tree
 If you have a tree they using it is easy to use but getting the splits is the tricky part. The only way really is just to try a bunch of values/splits and look at some measures to give indication about the improvement the split gives. Then you pick the split that gives the most improvement. For this we use the decision tree algorithm. This algorithm has to decide:
@@ -240,7 +243,6 @@ The algorithm works like this:
 1. Start from an empty decision tree
 2. Split on the next best **attribute**
 3. Repeat
-
 
 ## Decision tree classification
 Ok but what is the next best attribute? For classification, you can determine it based on these three things:
@@ -271,7 +273,7 @@ You can also calculate entropy for sequences.
 
 Now here are some more things about entropy she discussed. 
 
-What this shows is that if a sequence is more equal then as in there is an equal division of p between classes then the entropy is higher. This makes entropy the method for dealing with unbalanced data.
+What this shows are that if a sequence is more equal then as in there is an equal division of p between classes then the entropy is higher. This makes entropy the method for dealing with unbalanced data.
 
 <u>The idea of using entropy is to try a split and then to calculate what the entropy is after the split. Take the option that has the **lowest entropy** after the split. This option has the least uncertainty.</u>
 
@@ -332,7 +334,7 @@ The tree can get huge quickly. The complexity of a decision tree model is determ
 ![Overfitting](tree_depth9overfitting.png)
 
 ### Ways of reducing model complexity. (hyperparameters)
- There are hyper parameters that limit model complicity. You should set alteast one of these as theoretically you can keep growing the tree forever.
+ There are hyper parameters that limit model complicity. You should set at least one of these as theoretically you can keep growing the tree forever.
 - max_depth = The max depth the tree can grow
 - max_leaf_nodes = The maximum leaf nodes that can exist
 - min_samples_split = A minimum amount of samples that have to be in a split to make a split.   
@@ -341,7 +343,7 @@ There are also more parameters
 ## Advantages and Disadvantages of decision trees
 **Advantages**
 - Easy to interpret and make for straightforward visualizations
-- The interal workings are capable of being observed and thus makes it possible to easily reproduce work
+- The internal workings are capable of being observed and thus makes it possible to easily reproduce work
 - Can handle both numerical and categorical data directly without preprocessing
 - Performs well on large datasets
 - Performs fast in general
@@ -351,12 +353,12 @@ There are also more parameters
 - Prone to overfitting, especially when the trees' depth increases
 
 # Bias and variance
-Before we move on to ensamble learning lets have a reflection moment. 
-So far these algorihms were covered:
+Before we move on to ensemble learning lets have a reflection moment. 
+So far these algorithms were covered:
 
 | Classification      |Regression                     |
 |---------------------|-------------------------------|
-| Logistic Regresion  | Linear Regression             |
+| Logistic Regression  | Linear Regression             |
 | Linear SVMs         | Linear SVM                    |
 | KNN                 | KNN regression                |
 | Neural networks     | Polynomial Regression         |
@@ -382,13 +384,13 @@ Both variance and bias are related to model complexity. If you make your model *
 
 ![Depiction of low and high variance and bias in dartboards](lowhighbaisvariance.png)
 
-This was picture made by scott fortmann roe. [He has a nice further explination about the bias and variance tradeoff.](http://scott.fortmann-roe.com/docs/BiasVariance.html)  
+This was picture made by scott fortmann roe. [He has a nice further explanation about the bias and variance tradeoff.](http://scott.fortmann-roe.com/docs/BiasVariance.html)  
 
 A low bias, and a low variance are the two most fundamental features expected for a model.
 
 Here are more charts that show the effect even more! Made by Duda and Hart.
 
-![Varience and bias even more graphs](biasandvarianceevenmore.png)
+![Variance and bias even more graphs](biasandvarianceevenmore.png)
 
 The bais and variance are the cause of the underfitting overfitting problem. Because of it you normally expect model performance to behave like this: 
 
@@ -794,7 +796,7 @@ As you see the word day has a higher score then beautiful.
 # Dimensionality reduction
 Dimensionality reduction is the first **unsupervised technique** that we got a look at. This means this technique does not have targets to optimize the models. This is more of a data preprocessing method. The idea of dimensionality reduction is to represent high dimensional data with lower dimensional data with less features. But the features that are there will summarize all the other data. A good example were this is useful is images. Only if you have an 8 x 8 pixel image this is already 64 features. If you have a 1280x720 image you have 77600 features. The possible **combinations** increase exponentially. This becomes hard to deal with and besides that the **curse of dimensionality** comes knocking on your door. Do you really need to take all the individual pixels into account anyways? Reducing the dimensionality of your data also makes it much easier to visualize. 
 
-There are 2 discused ways of doing this: 
+There are 2 discussed ways of doing this: 
 
 ## Principal components analysis (PCA)
 
@@ -822,26 +824,26 @@ So now you have 2 components. So we put in 2 features and got 2 other features b
 - Principle component 1 = a * feature1 + b * feature2
 - Principle component 2 = c * feature1 + d * feature2
 
-a, b, c and d are related to the **Pearson Coefficient** of the lines and the coralation of the points. The first component explains as much variance as possible of the dataset. The second component tries to explain remaining variance in the dataset and is uncorrelated to the first component. You start the line in the middle of your cloud of points.  
+a, b, c and d are related to the **Pearson Coefficient** of the lines and the correlation of the points. The first component explains as much variance as possible of the dataset. The second component tries to explain remaining variance in the dataset and is uncorrelated to the first component. You start the line in the middle of your cloud of points.  
 
-If you look at the last plot you see that now the data is almost completely described by principal component 1. Principle component 2 describes the noise. **Therefore we can discard principale component 2.**
+If you look at the last plot you see that now the data is almost completely described by principal component 1. Principal component 2 describes the noise. **Therefore we can discard principale component 2.**
 
-This leaves is with one feature! 
+This leaves us with one feature! 
 
 
 If you remove the second component you get a line like this: 
 
-![PCA overfiew](pca-overvief.png)
+![PCA overview](pca-overvief.png)
 
-So now we have a machine that can combine 2 corralated features into 1. 
+So now we have a machine that can combine 2 correlated features into 1. 
 
 ### How do you compute PCA
 1. Take the whole dataset and ignore the labels 
 2. Compute the mean and covariance 
-3. Center and scale the data (PCA is sensative for scaling)
+3. Center and scale the data (PCA is sensitive for scaling)
 4. Get the eigen vectors and eigen values from the covariance matrix or correlation matrix, or perform a singular vector decomposition
 5. Sort eigenvalues in descending order
-6. Choose the k eigenvectors that correspond to the eigenvalues where k is the number of dimensions of the new feature space. (So k <= d where d is the orginal number of dimensions)
+6. Choose the k eigenvectors that correspond to the eigenvalues where k is the number of dimensions of the new feature space. (So k <= d where d is the original number of dimensions)
 7. Construct the projection matrix W that will be used to transform the data. 
    
 > A projection matrix is a matrix out of the top k eigenvectors 
@@ -850,7 +852,7 @@ If you want to do more than 2 features you just rotate the coordinate system in 
 
 The first couple principal components will be the most relevant for classification.
 
-This is how pca lookes when you do it to an image:
+This is how pca looks when you do it to an image:
 ![Pca when applied to images](pca-on-images.png)
 
 #### How much components to keep?
@@ -933,17 +935,17 @@ Clustering is finding natural groups in data. You don't know the groups beforeha
   - How many groups are there?
 - Data partitioning 
   - Divide data by group before further processing
-- Unsupervised feature extration 
+- Unsupervised feature extraction 
   - Derive features from clusters or cluster distances
 
 We can achieve these goals with these techniques:
 - K-means
-- Heirachical clustering
+- Hierarchical clustering
 - Density based Techniques
 - Gaussian Mixture models
 
 ## K means
-The idea of k means clustering is to seperate samples into **k groups of <u>equal</u> variance**. So to do K-means clustering you need to know how much clusters you want. There are techniques to make good decisions about this. 
+The idea of k means clustering is to separate samples into **k groups of <u>equal</u> variance**. So to do K-means clustering you need to know how many clusters you want. There are techniques to make good decisions about this. 
 
 ![K means clustering](k-mean-clustering.png)
 
@@ -956,7 +958,7 @@ The algorithm goes like this:
 5. If solution converges stop otherwise go back to step 3. (e)
 6. Clustering is done and data is divided into clustering (f)
 
-You recompute the centriods (step 4) by finding the local minimum of minimizing squared distances. 
+You recompute the centroids (step 4) by finding the local minimum of minimizing squared distances. 
 
 ![Formula for minimizing squared distances](formula_minimizing_squared_distances.png)
 
@@ -970,14 +972,14 @@ Things can go wrong like this:
 
 ![K-means clustering going wrong](k-mean-clustering-going-wrong.png)
 
-Because K-mean clustering is very dependent on were you start with the centriods its a good idea to try cluster  multiple times (default) with different starting positions. For large datasets K-means initialization (calculating the distances) can take longer than the actual clustering (Minimizing the distance). For this there is MiniBatchKmeans.  
+Because K-mean clustering is very dependent on were you start with the centroids it's a good idea to try cluster  multiple times (default) with different starting positions. For large datasets K-means initialization (calculating the distances) can take longer than the actual clustering (Minimizing the distance). For this there is MiniBatchKmeans.  
 
 ### MiniBatchKMeans 
 MiniBatchKMeans uses mini batches to reduce the computation time while still attempting to optimising the same objective. It works like this:
 
 1. Draw samples randomly from the dataset to form a minibatch 
 2. Assign the nearest centroids
-3. Update the centroids by using a convex combination of the average of the samples and the previous samples assigned to that centroid. 
+3. Update the centroids by using a convex combination of the average of the samples, and the previous samples assigned to that centroid. 
 4. Perform above till convergence or iteration limit. 
 
 Turns out that this is much faster and almost the same results.
@@ -995,7 +997,7 @@ You can also visualize this as a tree were each node of the tree is a merger of 
 
 You can do even better by making special plots called **dendrogram** that visualize the arrangement of the clusters produced. 
 
-![A dendogram](dendogram.png)
+![A dendrogram](dendogram.png)
 
 This helps to decide where to stop merging and also keeps a nice history of merges. 
 
@@ -1019,23 +1021,23 @@ Here are different results when you use the different clustering techniques:
 - Hierarchical clustering gives more holistic view, can help with picking the number of clusters for other techniques
 
 ## Density based clustering methods (DBSCAN)
-Density-Based Spatial Clustering of applications with noise (DBSCAN) is a clustering technique were you devide the datapoints into 3 groups based on hyperparameters called **Density** this is the number of points within a specified radius r. r is usually called **epsilon**. 
+Density-Based Spatial Clustering of applications with noise (DBSCAN) is a clustering technique were you divide the datapoints into 3 groups based on hyperparameters called **Density** this is the number of points within a specified radius r. r is usually called **epsilon**. 
 The 3 groups are: 
 - **Core points**: Points with more than a specified number of points (min_samples) within epsilon. This includes samples inside the cluster 
-- **Border points** Points with fewer then min_samples within epsilon, but is in the neighborhood of a core point. So one of the points that makes another point a core point
+- **Border points** Points with fewer than min_samples within epsilon, but is in the neighborhood of a core point. So one of the points that makes another point a core point
 - **Noise points**: Any point that is not a core or border point. 
 
 So if a point is close to a lot of other points it is a core point. If a point contributed to making a point a core point it becomes a border point. All the other points are noise points.
 
 ![DBSCAN](DBSCAN.png)
 
-### DBSCAN Algoritm 
+### DBSCAN Algorithm 
 1. Start with a core sample/point 
 2. Recursively find neighbors that are also core points and
 add them to the cluster
 3. Also add samples within epsilon that are not core points (but don’t recurse) this means adding the border points but don't search further with those points
 4. If no other points are “reachable”, pick another core point to start a new cluster.
-5. Repeat till you went trough all core points
+5. Repeat till you went through all core points
 6. Remaining points are labeled outliers/noise points 
 
 ![DBSCAN in action](DBSCAN_in_action.png)
@@ -1051,32 +1053,32 @@ add them to the cluster
 #### Limitations:
 - Varying densities because your cluster size varies 
 - Is slower with High-dimensional data
-- Epislon is hard to pick (can be done based on number of clusters though)
+- Epsilon is hard to pick (can be done based on number of clusters though)
 
 All with all this is a really good technique and can even predict hard clusters like this no problem. 
 
 ![Hard to predict cluster](hardcluster.png)
 
 ## Mixture methods
-The idea of a mixture model is that you want to find a generative model. This means finding a the parameters for a function p(x).
+The idea of a mixture model is that you want to find a generative model. This means finding the parameters for a function p(x).
 
 This method makes a couple assumptions
 - Data is mixture of small number of known distributions 
 - Each mixture component distribution can be learned "simply"
 - Each point comes from one particular component
 
-The goal is to learn the component paramets and weights of the components. 
+The goal is to learn the component parameters and weights of the components. 
 
 ![P formula mix models](p_formulamixmodels.png)
 
 ### Gaussian Mixture models
-Here you assume that each component is created by a Gaussian distribution and there is a multinomial distrobution over the components. 
+Here you assume that each component is created by a Gaussian distribution and there is a multinomial distribution over the components. 
 
 Here is is the big scary formula:
 
 ![Gaussian mixture model formula for p(x)](big_scary_formula.png)
 
-The parameters are learned by a process called **non-convex optimization**. You make a lot of distributions for each potential cluster and then merge them together based on how good they are. Each distrobution you gerenate is called a **component**. This is done with an algoritm called the **EM algorithm**. The EM algorithm assigns points to the components and then calculates the mean and the variance. You initialize this method with K-means and then you do random restarts.
+The parameters are learned by a process called **non-convex optimization**. You make a lot of distributions for each potential cluster and then merge them together based on how good they are. Each distribution you generate is called a **component**. This is done with an algorithm called the **EM algorithm**. The EM algorithm assigns points to the components and then calculates the mean and the variance. You initialize this method with K-means, and then you do random restarts.
 
 This gives you different distributions each time. The idea is that you merge the distributions you got into a final distribution. 
 
@@ -1087,24 +1089,24 @@ This model needs to know the amount of clusters that you want. The nice thing wi
 ![K-means vs GMM](gaussianmixturevskmeans.png)
 
 ## How to evaluate unsupervised learning models
-This is a problem because unlike with supervised learning there is no source of truth. There are a lot of ways to this but the 2 ways highlighted in the course are:
+This is a problem because unlike with supervised learning there is no source of truth. There are a lot of ways to this, but the 2 ways highlighted in the course are:
 
 ### Elbow plot
-This is a way to find out how many clusters you should ask for. This computes the sum of squared distances (SSE) between data points, and their assigned clusters centriods. If you do this you will get a graph like this: 
+This is a way to find out how many clusters you should ask for. This computes the sum of squared distances (SSE) between data points, and their assigned clusters centroids. If you do this you will get a graph like this: 
 
 ![Elbow plot](elbowplot.png)
 
 Pick the desired number of clusters at the spot where SSE starts to flatten out and forming an elbow. 
 
-### Silhoute Coeffcient 
-Another way to find out how many clusters to ask for is silhouete coefficient. For this technique the idea is that for each sample:
+### Silhouette Coefficient 
+Another way to find out how many clusters to ask for is silhouette coefficient. For this technique the idea is that for each sample:
 1. You compute the average distance from all the data points in the same cluster (ai)
 2. Compute the average distance from all data points in the closest cluster 
-3. Then you compute the silhoutte coefficient:
+3. Then you compute the silhouette coefficient:
 
 ![Formula for silhouette Coefficient](silhouette_coefficient_formula.png)
 
-You do this for every datapiont. So every datapoint gets a silhouette coefficient score.  
+You do this for every datapoint. So every datapoint gets a silhouette coefficient score.  
 
 The result will be in the range of [-1, 1]. This is what the results mean:
 - If 0: The sample is very close to the neighboring clusters
@@ -1117,11 +1119,11 @@ The result will be in the range of [-1, 1]. This is what the results mean:
 ![Silhouette in action k = 2](silhouette3.png)
 ![Silhouette in action k = 2](Silhouette4.png)
 
-The tickness of the plot indicates how many points are in that cluster. Every horizontal line is the silhouette coefficient of one point in the cluster. 
+The thickness of the plot indicates how many points are in that cluster. Every horizontal line is the silhouette coefficient of one point in the cluster. 
 
 The mean silhouette coefficient is highest for n_clusters = 2 so this is the amount of clusters you should go for with this example. You can also see this because this is the only version were all clusters are above average. 
 
 
-This summary was completly written in markdown it is easy to write and you can make beatifull pdfs out of it with a tool named pandoc. 
+This summary was completely written in markdown it is easy to write, and you can make beautiful pdfs out of it with a tool named [Pandoc](https://github.com/jgm/pandoc). A great tool to convert documents to other types of documents. 
 
 [comment]: <> (TODO, fix formatting ctrl shift alt l, check spelling, move figures into figures folder, maybe make some figures smaller.)
