@@ -9,7 +9,8 @@ lang: "en"
 toc-own-page: true
 toc: true
 ---
-**Summary written by Quinten Cabo**
+**This summary was written by Quinten Cabo** its available [here on Github](https://github.com/tintin10q/csai_ml_final_summary) 
+https://github.com/tintin10q/csai_ml_final_summary
 
 ### Disclaimer
 
