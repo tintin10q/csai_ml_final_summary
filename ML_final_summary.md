@@ -273,7 +273,7 @@ You can also calculate entropy for sequences.
 
 Now here are some more things about entropy she discussed. 
 
-What this shows is that if a sequence is more equal than as in there is an equal division of p between classes then the entropy is higher. This makes entropy the method for dealing with unbalanced data.
+This shows that if a sequence is more equal (as in there is an equal division of p between classes), then the entropy is higher. This makes entropy the method for dealing with unbalanced data.
 
 <u>The idea of using entropy is to try a split and then to calculate what the entropy is after the split. Take the option that has the **lowest entropy** after the split. This option has the least uncertainty.</u>
 
@@ -303,7 +303,7 @@ The formula is IG(Y|X) = H(Y) - H(Y|X)
 IG(Y|X) is pronounced as information gain in Y due to X. If X is 
 
 If X is completely uninformative about Y then IG(Y|X) = 0
-If X is completely uninformative about Y then IG(Y|X) = H(Y) E.G. everything that is uncertain is gone
+If X is completely uninformative about Y then IG(Y|X) = H(Y) E.G., everything that is uncertain is gone
 This is what you use in making the tree. **You want to find the split with the highest information gain.**
 > You can see information gain as taking away entropy
 
@@ -326,7 +326,7 @@ For regression with decision trees you use the **weighted mean square error** to
 
 N is the number of training samples at a certain node. y is the true target value y^ is the predicted sample mean. 
 
-As you can see just like with decision tree classification you again get these straight lines in the decision boundary. 
+As you can see just like with decision tree classification, you again get these straight lines in the decision boundary. 
 
 ## Complexity of the model 
 The tree can get huge quickly. The complexity of a decision tree model is determined by the depth of the tree. **Increasing the depth** of the tree increases the number of decision boundaries and **may lead to overfitting**. For example all these places might have overfitting:
@@ -353,7 +353,7 @@ There are also more parameters
 - Prone to overfitting, especially when the trees' depth increases
 
 # Bias and variance
-Before we move on to ensemble learning lets have a reflection moment. 
+Before we move on to ensemble learning, lets have a reflection moment. 
 So far these algorithms were covered:
 
 | Classification      |Regression                     |
@@ -402,7 +402,7 @@ It seems like the models so far have to deal with this problem. Especially logis
 Ensemble methods try to reduce bias and or variance of weak (single) models by combining several of them together to achieve better performance. The ways of doing this are called **Voting**, **Bagging**, **Boosting** and **Stacking**.
 
 ## Voting 
-Voting is a method were you make multiple models vote on what the output should be. This makes the most sense for classifiers. You just train multiple models and each model votes on what they predict is the correct label. You pick the label with the most votes. This is called **hard voting**. Because the idea of voting is simple it works with any model also neural networks. But we can do better than just counting votes.
+Voting is a method were you make multiple models vote on what the output should be. This makes the most sense for classifiers. You just train multiple models and each model votes on what they predict is the correct label. You pick the label with the most votes. This is called **hard voting**. Because the idea of voting is simple, it works with any model also neural networks. But we can do better than just counting votes.
 
 Some classifiers also know how "sure" they are of their conviction. For instance naive Bayes. You could give the votes of these models a higher weight.  
 
@@ -410,22 +410,22 @@ Some classifiers will be the most "sure" about a particular part of the space. Y
 
 If you use weights, you in the end you average the results instead of just counting votes. This is called **soft voting**.
 
-More models take longer to train but the results you will get are also based on much more. However, **only combine models if they are not correlated**. You can only do averaging instead of counting if all the models output calibrated/scaled ("good") probabilities.
+More models take longer to train, but the results you will get are also based on much more. However, **only combine models if they are not correlated**. You can only do averaging instead of counting if all the models output calibrated/scaled ("good") probabilities.
 
 The sklearn version of this is called VotingClassifier. You give this class a list of other models. 
 
 ## Bagging (bootstrap aggregation)
 Bagging fits several "independent" models and averages their predictions in order to lower the variance. So this technique is for low bais and high variance models.
 
-Fitting fully independent models requires too much data. This is why we need bootstrapping. **Bootstrapping is taking random samples of the same size (B) from the dataset with repetition.** With repetition means that a datapoint can be in multiple samples. Once you have the bootstrapped samples you can train models on them. These could be all the same or different ones. 
+Fitting fully independent models requires too much data. This is why we need bootstrapping. **Bootstrapping is taking random samples of the same size (B) from the dataset with repetition.** With repetition means that a datapoint can be in multiple samples. Once you have the bootstrapped samples, you can train models on them. These could be all the same or different ones. 
 
 ![Bootstrapping](bootrapping.png)
 
-So **bootstrapping is creating the samples** from the data and **bagging is fitting models on these samples and taking the average**. You basically create a lot of models based on essentially the same data but you just leave out random data points for every sample. This way each model will have slightly different results. The average of these results will have a lower variance.
+So **bootstrapping is creating the samples** from the data and **bagging is fitting models on these samples and taking the average**. You basically create a lot of models based on essentially the same data, but you just leave out random data points for every sample. This way each model will have slightly different results. The average of these results will have a lower variance.
 
 ![Nice bagging picture](nicebagging.png)
 
-With bagging you can also **approximate the variance or confidence interval of the estimator** by evaluating the variance that all the bootstrapped samples have. 
+With bagging, you can also **approximate the variance or confidence interval of the estimator** by evaluating the variance that all the bootstrapped samples have. 
 For regression a simple average is used for classification you can use the voting techniques. 
 
 ![Approximate the variance process](aproxvariancebagging.png)
@@ -440,7 +440,7 @@ Decision Trees can be:
 - **Deep**. Deep trees have low bias and high variance. Better choice for bagging method as that is focused on reducing the variance. 
 
 With random forests you do bagging but **you only use (deep) decision trees** to train on the bootstrapped samples.
-In addition to that the **set of features you base the splitting decisions on are randomly selected.** So the decision trees only use a subset of the available features to make the splits. This is done to **reduce correlation**. More trees are always beter. 
+In addition to that the **set of features you base the splitting decisions on are randomly selected**. So the decision trees only use a subset of the available features to make the splits. This is done to **reduce correlation**. More trees are always beter. 
 
 
 ![Bootstrapping and subset for each split](decisiontreesplit.png)
@@ -459,9 +459,9 @@ How do you combine the results of the trees? You average the tree. The result of
 
 In this case we averaged 2 decision tree results. In the areas where the trees don't mach the average is 0 (because there are only 2 trees) which means you don't know the answer. If you have more trees you would have places were you are more and less sure instead. To decide on an output for **classification you take the mode** of the classes that were outputted and for **regression you could take the mean** of the values outputted by the trees.  
 
-With sklearn the model is called `ensemble.RandomForestClassifer`. Special hyper parameter that random forests have are:
-- `max_features`. Hopefully it is obvious what that does. The recommendation is to pick `n_features^0.5` for classification and n_features for regression. 
-- `n_estimators`, This is the amount of trees you want. The more the better. It is recommended to have at least 100. But the more the better.
+With sklearn the model is called `ensemble.RandomForestClassifer`. Special hyperparameter that random forests have, are:
+- **max_features**: Hopefully it is obvious what that does. The maximum amount of features. The recommendation is to pick `n_features^0.5` for classification and n_features for regression. 
+- **n_estimators**: This is the amount of trees you want. The more, the better. It is recommended to have at least 100. But the more, the better.
 
 ## Boosting
 With boosting you fit the weak models in sequence unlike bagging which fits in parallel. You do this, so that a model knows about the results of the previous model. This way a model can give more importance to the observations in the dataset that were badly handled by the previous models in the sequence. This way bias can be reduced. So this technique is for a high bais and low variance models. 
@@ -486,7 +486,7 @@ You can use any weak learning model you want but often a decision tree with dept
 [Video going into more depth about ada boosting](https://www.youtube.com/watch?v=LsK-xG1cLYA)
 
 ### Gradient boosting
-Gradient boosting starts with a simple prediction it could be the mean but it is just a guess. This guess will have a certain error/residuals. Instead of making stumps like adaboost, gradient boost can make bigger trees, but you still set a max size. With these bigger trees it tries to predict the pseudo residuals of the data instead of the target. Then when this tree is made you have to scale the prediction down with a learning rate so the model has less impact on the final result. Then combine this tree with the original prediction, and train a new model based on the new residuals. You should have moved a bit into the right direction from the original prediction. This will give you new pseudo residuals the next tree can try to predict. This tree is then also added to the chain and the residuals should keep getting smaller with every tree you add.
+Gradient boosting starts with a simple prediction it could be the mean, but it is just a guess. This guess will have a certain error/residuals. Instead of making stumps like adaboost, gradient boost can make bigger trees, but you still set a max size. With these bigger trees it tries to predict the pseudo residuals of the data instead of the target. Then when this tree is made you have to scale the prediction down with a learning rate, so the model has less impact on the final result. Then combine this tree with the original prediction, and train a new model based on the new residuals. You should have moved a bit into the right direction from the original prediction. This will give you new pseudo residuals the next tree can try to predict. This tree is then also added to the chain, and the residuals should keep getting smaller with every tree you add.
 
 The idea is to find out what the best next tree is every time. I don't really get this one :'(
 
@@ -503,16 +503,16 @@ There is also extreme boosting.
 ## Stacking 
 Trains many models in parallel and combines them by training on a meta model to output a prediction based on different weak models predictions. 
 
-So you choose some weak learners for instance KNN or SVM or a decision tree and then you also choose something as a meta model. Usually a neural network. Then you use the combined output of the weak learners that were trained in parallel as input to the strong learner. 
+So you choose some weak learners for instance KNN or SVM or a decision tree, and then you also choose something as a meta model. Usually a neural network. Then you use the combined output of the weak learners that were trained in parallel as input to the strong learner. 
 
 ![Stacking](stacking.png)
 
-You train the weak learners and the meta model on different parts of the data. So you split your data in **two folds**. The first fold is to fit the weak learners and the second fold is for fitting the meta model. Each of the weak learners then tries to make predictions for the observations in the second fold. This gives you the ability to fit the meta model with the predictions made by the weak learners as input. 
-**Doing this does mean you only have half of the data**. But you can use **k-fold cross training** (similar to k-fold-cross validation) to get around by making sure that all the observations can be used to train the meta model.
+You train the weak learners, and the meta model on different parts of the data. So you split your data in **two folds**. The first fold is to fit the weak learners, and the second fold is for fitting the meta model. Each of the weak learners then tries to make predictions for the observations in the second fold. This gives you the ability to fit the meta model with the predictions made by the weak learners as input. 
+**Doing this does mean you only have half of the data**. But you can use **k-fold cross-training** (similar to k-fold-cross validation) to get around by making sure that all the observations can be used to train the meta model.
 
 ![k-fold-training](k-fold-training.png)
 
-In sklearn there is poor man staking and you just use a Voting classifier. 
+In sklearn there is poor man staking, and you just use a Voting classifier. 
 
 
 There is also hold out stacking and naive stacking. 
@@ -555,7 +555,7 @@ You can also do k-fold cross validation we have seen this already in the other s
 - Increases computational time because you train more models
 - Simple cross validation can result in class imbalance between training and test. This would lead to lower scores than you could really get. To get around this we can do **stratified cross validation**. This is where you make sure that there is no class imbalance in the different folds. 
 
-You can also set k to N and then you make the whole model with all the data and only test with one point. This as you know is called **leave one out validation**. This is very time consuming but this can be the **best method for small datasets** as it generates predictions on the maximum available data. Small datasets also decrease the training time again. This can also be useful to find out which items are regular and irregular from the point of view of the dataset. 
+You can also set k to N, and then you make the whole model with all the data and only test with one point. This as you know is called **leave one out validation**. This is very time-consuming but this can be the **best method for small datasets** as it generates predictions on the maximum available data. Small datasets also decrease the training time again. This can also be useful to find out which items are regular and irregular from the point of view of the dataset. 
 
 ### Shuffle split  
 The idea of this is that you do k-fold cross validation but which fold you use is picked at random. This:
@@ -599,7 +599,7 @@ If you only use accuracy you can get some problems if you have imbalanced data. 
 
 ![Accuracy can be a problem](problemwithaccuracy.png)
 
-What scores you attach to most value to depends on the **goal setting**. Let's say you have a pacemaker factory then you have to be sure that every pacemaker is 100% save, and you are ok with trowing away some pacemakers. Even some false negatives. Because economically speaking a false positive (working but looks broken) will cost you 10 euros while a false negative (broken but looks ok) will cost you a potential human live (wich will cost you more than 10 euros).
+What scores you attach to most value to depend on the **goal setting**. Let's say you have a pacemaker factory then you have to be sure that every pacemaker is 100% save, and you are ok with trowing away some pacemakers. Even some false negatives. Because economically speaking a false positive (working but looks broken) will cost you 10 euros while a false negative (broken but looks ok) will cost you a potential human live (wich will cost you more than 10 euros).
 
 Changing the threshold that is used to make a classification decision in a model is a way to adjust the trade-off of precision and recall for a given classifier. This gives you the precision recall curve. This is useful when you make a new model. 
 
@@ -615,7 +615,7 @@ Then using that you can make the roc curve it looks like this:
 
 ![Roc-curve](roc-curve.png)
 
-**The more area under the curve the better**. If you had complete random guesses the lines would go directly through the middle. This model is better and there is a lot of area under the curve. More better for balanced data. 
+**The more area under the curve the better**. If you had complete random guesses the lines would go directly through the middle. This model is better and there is a lot of area under the curve. Better for balanced data. 
 
 ### Multiclass classification metrics 
 
@@ -658,7 +658,7 @@ How to deal with it:
 - Change the training procedure.
 - Don't deal with it.
 
-With **random undersampeling** you lose data but this also makes training faster. With **random oversampling** you get more data so more chance at overfitting and slower training but at least you don't loose data. 
+With **random undersampeling** you lose data but this also makes training faster. With **random oversampling** you get more data so more chance at overfitting and slower training but at least you don't lose data. 
 
 You can also do an **edited nearest neighbors method**. The idea is to remove all the samples that are misclassified by a KNN from the training data. Cleans up the training data by removing outliers. 
 You can also do **condensed nearest neighbors method**. This iteratively adds points to the data that are misclassified by KNN and tries to do the opposite of edited. This way you get a dataset that focuses on the boundaries and so usually removes a lot of points. This is not really used a lot. 
@@ -675,7 +675,7 @@ Again the idea is to calculate multiple metrics and focus more on the ones that 
 When you trow your data at a machine learning model as is, you might not get optimal performance. You can do things to your data that do not change the semantics of your data while improving the generalization ability of your model.
 
 ## Scaling
-We have seen this already a lot. The idea is the you scale the data to be on the scale. This makes it easier to compare data that is on scales with small and big numbers that is not so easy to convert. For instance km and hertz. 
+We have seen this already a lot. The idea is that you scale the data to be on the scale. This makes it easier to compare data that is on scales with small and big numbers that is not so easy to convert. For instance km and hertz. 
 
 ### Standard Scaler
 With this method you calculate the z score for every data point. Effectively you calculate how far something is from the mean.  
@@ -685,15 +685,15 @@ With this method you calculate the z score for every data point. Effectively you
 This works well for non skewed data. 
 
 ### Robust Scaler
-The same formula but instead you assume a normal distribution, and you use the median instead of the mean and you use the interquartile range instead of the standard deviation. This is better for skewed data and deals better with outliers.  
+The same formula but instead you assume a normal distribution, and you use the median instead of the mean, and you use the interquartile range instead of the standard deviation. This is better for skewed data and deals better with outliers.  
 
 ### Min Max Scaler
-Shifts data to the 0-1 interval. Take the maximum value of your dataset and minimum value of your dataset and just calculate where the other data points lie in between those and then you can get a 0-1 scale. Nice. 
+Shifts data to the 0-1 interval. Take the maximum value of your dataset and minimum value of your dataset and just calculate where the other data points lie in between those, and then you can get a 0-1 scale. Nice. 
 
 ![Min max scaling](min-max-scaling.png)
 
 ### Normalizer
-This method does not work for one feature but for the features of a point. It does this by seeing all the features of a datapoint as a row or vector. The idea is then that you scale all the data of a point (one row) so that the norm (of the vector) becomes 1. Then you divide each point of the row by the norm. This is method is not used that often. Mostly used when the direction of the data matters and it could be helpful for histograms. 
+This method does not work for one feature but for the features of a point. It does this by seeing all the features of a datapoint as a row or vector. The idea is then that you scale all the data of a point (one row) so that the norm (of the vector) becomes 1. Then you divide each point of the row by the norm. This is method is not used that often. Mostly used when the direction of the data matters, and it could be helpful for histograms. 
 
 > The norm of a vector is the square root of the squared elements of the vector. 
 
@@ -754,9 +754,9 @@ The curse of dimensionality is the fact that adding more and more features will 
 
 ![Curse of dimensionality](curseofdimensionality.png)
 
-After you have reached the optimal number of features your performance decreases by adding more features. This is because of overfitting because adding more features exponentially increases the volume of the feature space.
+After you have reached the optimal number of features, your performance decreases by adding more features. This is because of overfitting because adding more features exponentially increases the volume of the feature space.
 
-This is a trade of because we want informative features but having too much will cause overfitting. As such the features you choose should be as informative as possible. 
+This is a trade of because we want informative features but having too much will cause overfitting. As such, the features you choose should be as informative as possible. 
 
 There are 3 different strategies discussed. 
 
@@ -777,9 +777,9 @@ Most machine learning models really like their data to be numerical but when you
 
 ![The bag of words technique steps](bagofwords.png)
 
-Before you do anything you need to **tokenize** your raw text. This means turning the raw text into a list of the raw elements of the text. Tokenizing is a whole subject in its own right. Are . , ; " \< \> ' tokens for instance? You could do **stemming** where you reduce words to their root like walking to walk. You could do **lemmatization** were you replace words with words from language databases. You could **restrict the dataset** by removing words that only occur once to reduce matrix size. You could remove words with low semantic content like the, is, a. Or you could not do any of these things. Do you split the words as 1 word or do you try parts of sentences? What about misspelled words? All dials you can tune in the tokenizing step. Tokenizing is easy to do but hard to do well. 
+Before you do anything, you need to **tokenize** your raw text. This means turning the raw text into a list of the raw elements of the text. Tokenizing is a whole subject in its own right. Are . , ; " \< \> ' tokens for instance? You could do **stemming** where you reduce words to their root like walking to walk. You could do **lemmatization** were you replace words with words from language databases. You could **restrict the dataset** by removing words that only occur once to reduce matrix size. You could remove words with low semantic content like the, is, a. Or you could not do any of these things. Do you split the words as 1 word or do you try parts of sentences? What about misspelled words? All dials you can tune in the tokenizing step. Tokenizing is easy to do but hard to do well. 
 
-Once you have tokenized your all your data you have built a vocabulary with the tokens. Then the next step is to create a sparse matrix encoding out of this vocabulary. Where for every token you say if it appears in a certain document or not. You could also use count instead of boolean to represent how often a word appears in a document. 
+Once you have tokenized your all your data, you have built a vocabulary with the tokens. Then the next step is to create a sparse matrix encoding out of this vocabulary. Where for every token you say if it appears in a certain document or not. You could also use count instead of boolean to represent how often a word appears in a document. 
 
 > A document is a very general term that can mean many things. It could mean a paragraph, different chapters, different files, different sentences etc.
 
@@ -791,10 +791,10 @@ You calculate TF-IDF as TF*IDF.
 
 ![TF-IDF example](TF-IDF.png)
 
-As you see the word day has a higher score then beautiful.
+As you see, the word day has a higher score then beautiful.
 
 # Dimensionality reduction
-Dimensionality reduction is the first **unsupervised technique** that we got a look at. This means this technique does not have targets to optimize the models. This is more of a data preprocessing method. The idea of dimensionality reduction is to represent high dimensional data with lower dimensional data with less features. But the features that are there will summarize all the other data. A good example were this is useful is images. Only if you have an 8 x 8 pixel image this is already 64 features. If you have a 1280x720 image you have 77600 features. The possible **combinations** increase exponentially. This becomes hard to deal with and besides that the **curse of dimensionality** comes knocking on your door. Do you really need to take all the individual pixels into account anyways? Reducing the dimensionality of your data also makes it much easier to visualize. 
+Dimensionality reduction is the first **unsupervised technique** that we got a look at. This means this technique does not have targets to optimize the models. This is more of a data preprocessing method. The idea of dimensionality reduction is to represent high dimensional data with lower dimensional data with fewer features. But the features that are there will summarize all the other data. A good example were this is useful is images. Only if you have an 8 x 8 pixel image this is already 64 features. If you have a 1280x720 image, you have 77600 features. The possible **combinations** increase exponentially. This becomes hard to deal with and besides that the **curse of dimensionality** comes knocking on your door. Do you really need to take all the individual pixels into account anyways? Reducing the dimensionality of your data also makes it much easier to visualize. 
 
 There are 2 discussed ways of doing this: 
 
@@ -807,19 +807,19 @@ In short this is what happens:
 ![Pca summary](pca4.png)
 
 ### Longer Example: 
-If you have 2 features that are highly correlated we can reduce them to 1. 
+If you have 2 features that are highly correlated, we can reduce them to 1! 
 
 ![Correlated features](pca1.png)
 
-These features are nicely correlated. Which means you could make a 2 vectors through the points with a 90 degree angle like this:
+These features are nicely correlated. Which means you could make a 2 vectors through the points with a 90-degree angle like this:
 
 ![Pca components](pca2.png)
 
-Then you rotate the vectors to be in line with the x and y axis. This way you make the line almost 1d instead of 2d.
+Then you rotate the vectors to be in line with the x and y-axis. This way you make the line almost 1d instead of 2d.
 
 ![Pca components rotated](pca3.png)
 
-So now you have 2 components. So we put in 2 features and got 2 other features back. But now these 2 features are a combination of the 2 original features: 
+So now you have 2 components. We put in 2 features and got 2 other features back... But now these 2 features are a combination of the 2 original features: 
 
 - Principle component 1 = a * feature1 + b * feature2
 - Principle component 2 = c * feature1 + d * feature2
@@ -860,8 +860,8 @@ This is one of those case by case questions, it depends on the amount of trainin
 
 A good measure is the **total explained variance** by the new data. The more components you keep the more variance is explained by the data. However, each component you add will give diminishing returns on how much extra variance you explain. Try to choose a k that explains an amount of the variance that you are happy with. My advice is at least 90 to 95 percent of total variance explained. 
 
-## Non negative Matrix factorization (NMF)
-The idea of this is to take the data and find the **latent space**. Latent means hidden. This will give you smaller data. **The latent features have to be non negative**. You find the space with Matrix factorization. 
+## Non-negative Matrix factorization (NMF)
+The idea of this is to take the data and find the **latent space**. Latent means hidden. This will give you smaller data. **The latent features have to be non-negative**. You find the space with Matrix factorization. 
 
 ### Matrix factorization is:
 
@@ -881,11 +881,11 @@ You can then multiply the latent space (A) with weights (B) to get your original
 NMF can be viewed as soft clustering each point is positive linear combination of the weights. 
 
 #### Downsides of NMF
-- Can only be applied to non negative data (images, text)
+- Can only be applied to non-negative data (images, text)
 - Sometimes components are not interpretable
 - Non-convex optimization, requires initialization
 - Can be very slow
-- Not orthogonal (You dont really know were the components are)
+- Not orthogonal (You don't really know were the components are)
 
 ## PCA VS NMF
 ![PCA VS NMF](pcavsnmf.png)
@@ -893,7 +893,7 @@ NMF can be viewed as soft clustering each point is positive linear combination o
 ## Manifold learning 
 Manifold learning is **dimensionality reduction for data visualization**. The idea behind manifold learning is to make a complex mapping of the data also called the **underlying manifold structure** that can then be brought down to a lower dimension using dimensionality reduction to be visualized. This seems to work really well. **This technique is only for visualizations** as the axes of the plots don't correspond to anything in the input space, and these mappings can often not transform new data. But they give pretty pictures!
 
-There are multiple ways of doing this some of which can also be used for other things then visualization but the one talked about in the lecture was T-distributed Stochastic Neighbor Embedding. Actually a technique made by someone from tilburg University so that's cool. 
+There are multiple ways of doing this some of which can also be used for other things then visualization, but the one talked about in the lecture was T-distributed Stochastic Neighbor Embedding. Actually a technique made by someone from tilburg University so that's cool. 
 
 ![T-distributed Stochastic Neighbor Embedding](t-distrobuted_stochastic_neighbor_embedding.png)
 
@@ -972,7 +972,7 @@ Things can go wrong like this:
 
 ![K-means clustering going wrong](k-mean-clustering-going-wrong.png)
 
-Because K-mean clustering is very dependent on were you start with the centroids it's a good idea to try cluster  multiple times (default) with different starting positions. For large datasets K-means initialization (calculating the distances) can take longer than the actual clustering (Minimizing the distance). For this there is MiniBatchKmeans.  
+Because K-mean clustering is very dependent on were you start with the centroids, it's a good idea to try cluster  multiple times (default) with different starting positions. For large datasets K-means initialization (calculating the distances) can take longer than the actual clustering (Minimizing the distance). For this there is MiniBatchKmeans.  
 
 ### MiniBatchKMeans 
 MiniBatchKMeans uses mini batches to reduce the computation time while still attempting to optimising the same objective. It works like this:
@@ -1027,7 +1027,7 @@ The 3 groups are:
 - **Border points** Points with fewer than min_samples within epsilon, but is in the neighborhood of a core point. So one of the points that makes another point a core point
 - **Noise points**: Any point that is not a core or border point. 
 
-So if a point is close to a lot of other points it is a core point. If a point contributed to making a point a core point it becomes a border point. All the other points are noise points.
+So if a point is close to a lot of other points, it is a core point. If a point contributed to making a point a core point, it becomes a border point (if it isn't a core point already). All the other points are noise points.
 
 ![DBSCAN](DBSCAN.png)
 
@@ -1074,7 +1074,7 @@ The goal is to learn the component parameters and weights of the components.
 ### Gaussian Mixture models
 Here you assume that each component is created by a Gaussian distribution and there is a multinomial distribution over the components. 
 
-Here is is the big scary formula:
+Here is the big scary formula:
 
 ![Gaussian mixture model formula for p(x)](big_scary_formula.png)
 
@@ -1121,7 +1121,7 @@ The result will be in the range of [-1, 1]. This is what the results mean:
 
 The thickness of the plot indicates how many points are in that cluster. Every horizontal line is the silhouette coefficient of one point in the cluster. 
 
-The mean silhouette coefficient is highest for n_clusters = 2 so this is the amount of clusters you should go for with this example. You can also see this because this is the only version were all clusters are above average. 
+The mean silhouette coefficient is highest for n_clusters = 2 so this is the amount of clusters you should go for with this example. You can also see this because this is the only version where all clusters are above average. 
 
 
 This summary was completely written in markdown it is easy to write, and you can make beautiful pdfs out of it with a tool named [Pandoc](https://github.com/jgm/pandoc). A great tool to convert documents to other types of documents. 
