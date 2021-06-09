@@ -9,7 +9,7 @@ lang: "en"
 toc-own-page: true
 toc: true
 ---
-**This summary was written by Quinten Cabo** its available [here on Github](https://github.com/tintin10q/csai_ml_final_summary) 
+This summary is available [here on Github](https://github.com/tintin10q/csai_ml_final_summary) 
 https://github.com/tintin10q/csai_ml_final_summary
 
 ### Disclaimer
@@ -1196,4 +1196,6 @@ The mean silhouette coefficient is highest for n_clusters = 2 so this is the amo
 
 This summary was completely written in markdown it is easy to write, and you can make beautiful pdfs out of it with a tool named [Pandoc](https://github.com/jgm/pandoc). A great tool to convert documents to other types of documents.
 
-[comment]: <> (TODO, fix formatting ctrl shift alt l, check spelling, move figures into figures folder, maybe make some figures smaller.)
+
+This summary was lovingly writen by Quinten Cabo 💙
+Good luck!
