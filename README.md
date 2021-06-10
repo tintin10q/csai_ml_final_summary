@@ -321,9 +321,13 @@ If X and Y are independent, then X doesn't tell us anything about Y. So H(Y|X) =
 
 With information gain we look for how much information we gain about the features. The formula is IG(Y|X) = H(Y) - H(Y|X)
 
-IG(Y|X) is pronounced as information gain in Y due to X. If X is
+IG(Y|X) is pronounced as information gain in Y due to X. 
 
-If X is completely uninformative about Y then IG(Y|X) = 0 If X is completely uninformative about Y then IG(Y|X) = H(Y) E.G., everything that is uncertain is gone This is what you use in making the tree. **You want to find the split with the highest information gain.**
+If X is completely informative about Y then IG(Y|X) = 0 
+If X is completely uninformative about Y then IG(Y|X) = H(Y) 
+
+E.G., everything that is uncertain is gone This is what you use in making the tree. **You want to find the split with the highest information gain.**
+
 > You can see information gain as taking away entropy
 
 ### Gini Coefficient
@@ -468,7 +472,7 @@ Random forests is a bagging method were **deep decision trees**, fitted on boots
 
 Decision Trees can be:
 
-- **Shallow**. Shallow trees have low depth, these trees have less variance but higher bias, a better choice for sequential methods\boosting
+- **Shallow**. Shallow trees have low depth, these trees have less variance but higher bias, a better choice for sequential methods & boosting
 - **Deep**. Deep trees have low bias and high variance. Better choice for bagging method as that is focused on reducing the variance.
 
 With random forests you do bagging but **you only use (deep) decision trees** to train on the bootstrapped samples. In addition to that the **set of features you base the splitting decisions on are randomly selected**. So the decision trees only use a subset of the available features to make the splits. This is done to **reduce correlation**. More trees are always beter.
@@ -606,7 +610,7 @@ In cases that groups in the data are relevant to the learning problem you have t
 
 ## Tuning
 
-Tuning is where you improve the models' generalization performance by **tuning**\adjusting the hyperparameters. You can do this with grid search. Grid search is just a fancy word for training and testing with a lot of combinations of hyperparameters and using the best. You however should make clear before you do grid search which values you want to try.
+Tuning is where you improve the models' generalization performance by **tuning** adjusting the hyperparameters. You can do this with grid search. Grid search is just a fancy word for training and testing with a lot of combinations of hyperparameters and using the best. You however should make clear before you do grid search which values you want to try.
 **Simple grid search** is when you just try all the possible combinations of the hyperparameters you specified.
 **Grid search with cross validation** use cross validation to evaluate the performance of each combination of parameter values.
 

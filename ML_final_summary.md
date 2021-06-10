@@ -321,9 +321,13 @@ If X and Y are independent, then X doesn't tell us anything about Y. So H(Y|X) =
 
 With information gain we look for how much information we gain about the features. The formula is IG(Y|X) = H(Y) - H(Y|X)
 
-IG(Y|X) is pronounced as information gain in Y due to X. If X is
+IG(Y|X) is pronounced as information gain in Y due to X. 
 
-If X is completely uninformative about Y then IG(Y|X) = 0 If X is completely uninformative about Y then IG(Y|X) = H(Y) E.G., everything that is uncertain is gone This is what you use in making the tree. **You want to find the split with the highest information gain.**
+If X is completely informative about Y then IG(Y|X) = 0 
+If X is completely uninformative about Y then IG(Y|X) = H(Y) 
+
+E.G., everything that is uncertain is gone This is what you use in making the tree. **You want to find the split with the highest information gain.**
+
 > You can see information gain as taking away entropy
 
 ### Gini Coefficient
