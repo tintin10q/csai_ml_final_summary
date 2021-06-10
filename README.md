@@ -906,6 +906,7 @@ If you want to do more than 2 features you just rotate the coordinate system in 
 The first couple principal components will be the most relevant for classification.
 
 This is how pca looks when you do it to an image:
+
 ![Pca when applied to images](figures/pca-on-images.png)
 
 #### How many components to keep?
@@ -942,7 +943,7 @@ NMF can be viewed as soft clustering each point is positive linear combination o
 - Sometimes components are not interpretable
 - Non-convex optimization, requires initialization
 - Can be very slow
-- Not orthogonal (You don't really know were the components are)
+- Not orthogonal (You don't really know where the components are)
 
 ## PCA VS NMF
 
