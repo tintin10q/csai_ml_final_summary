@@ -832,7 +832,7 @@ Most machine learning models really like their data to be numerical but when you
 
 Before you do anything, you need to **tokenize** your raw text. This means turning the raw text into a list of the raw elements of the text. Tokenizing is a whole subject in its own right. Are . , ; " \< \> ' tokens for instance? You could do **stemming** where you reduce words to their root like walking to walk. You could do **lemmatization** were you replace words with words from language databases. You could **restrict the dataset** by removing words that only occur once to reduce matrix size. You could remove words with low semantic content like the, is, a. Or you could not do any of these things. Do you split the words as 1 word or do you try parts of sentences? What about misspelled words? All dials you can tune in the tokenizing step. Tokenizing is easy to do but hard to do well.
 
-Once you have tokenized your all your data, you have built a vocabulary with the tokens. Then the next step is to create a sparse matrix encoding out of this vocabulary. Where for every token you say if it appears in a certain document or not. You could also use count instead of boolean to represent how often a word appears in a document.
+Once you have tokenized your all your data, you have built a vocabulary with the tokens. Then the next step is to create a sparse matrix encoding out of this vocabulary. Where for every token you say if int appears in a certain document or not. You could also use count instead of boolean to represent how often a word appears in a document.
 
 > A document is a very general term that can mean many things. It could mean a paragraph, different chapters, different files, different sentences etc.
 
@@ -842,7 +842,7 @@ Term Frequency (TF) = Number of times a token appears in a document Inverse Docu
 
 ![TF-IDF example](figures/TF-IDF.png)
 
-As you see, the word day has a higher score then beautiful.
+As you see, the word day has a higher score than beautiful.
 
 # Dimensionality reduction
 
