@@ -306,7 +306,7 @@ She didn't say anything more about it either. So just use this formula.
 
 #### Conditional entropy
 
-Again we use the joint thing + chain rule to get the conditional rule. Conditional entropy H(X, Y) = H(X|Y)+H(Y) = H(Y|X) + H(X)
+Again we use the joint thing + chain rule to get the conditional rule. Conditional entropy: `H(X, Y) = H(X|Y)+H(Y) = H(Y|X) + H(X)`
 If you try to calculate the entropy of a conditional distribution you do it like this.
 
 ![Joint distribution](figures/conditional_entropy.png)
@@ -315,16 +315,16 @@ This is asking what is the entropy of X given Y. So instead of likeliness we are
 
 #### Dependent vs independent
 
-If X and Y are independent, then X doesn't tell us anything about Y. So H(Y|X) = H(Y). But of course Y tells us everything about Y. H(y|y) = 0. By knowing X we can decrease uncertainty about Y: H(Y|X) <= H(Y)
+If X and Y are independent, then X doesn't tell us anything about Y. So `H(Y|X) = H(Y)`. But of course Y tells us everything about Y. `H(y|y) = 0`. By knowing X we can decrease uncertainty about `Y: H(Y|X) <= H(Y)`
 
 ### Information gain
 
-With information gain we look for how much information we gain about the features. The formula is IG(Y|X) = H(Y) - H(Y|X)
+With information gain we look for how much information we gain about the features. The formula is `IG(Y|X) = H(Y) - H(Y|X)`
 
-IG(Y|X) is pronounced as information gain in Y due to X. 
+`IG(Y|X)` is pronounced as information gain in Y due to X. 
 
-If X is completely informative about Y then IG(Y|X) = 0 
-If X is completely uninformative about Y then IG(Y|X) = H(Y) 
+If X is completely informative about Y then `IG(Y|X) = 0`
+If X is completely uninformative about Y then `IG(Y|X) = H(Y)`
 
 E.G., everything that is uncertain is gone This is what you use in making the tree. **You want to find the split with the highest information gain.**
 
@@ -362,7 +362,7 @@ The tree can get huge quickly. The complexity of a decision tree model is determ
 
 ### Ways of reducing model complexity. (hyperparameters)
 
-There are hyper parameters that limit model complicity. You should set at least one of these as theoretically you can keep growing the tree forever.
+There are hyper parameters that limit model complexity. You should set at least one of these as theoretically you can keep growing the tree forever.
 
 - max_depth = The max depth the tree can grow
 - max_leaf_nodes = The maximum leaf nodes that can exist
@@ -600,7 +600,7 @@ You can also set k to N, and then you make the whole model with all the data and
 
 The idea of this is that you do k-fold cross validation but which fold you use is picked at random. This:
 
-- Controls test-siz, training-size and number of iterations. You can again also do **stratified shuffle split cross validation** what a mouthful.
+- Controls test-size, training-size and number of iterations. You can again also do **stratified shuffle split cross validation** what a mouthful.
 
 ![Shuffle Split](figures/shuffle_split.png)
 
@@ -639,7 +639,7 @@ If you only use accuracy you can get some problems if you have imbalanced data. 
 
 ![Accuracy can be a problem](figures/problemwithaccuracy.png)
 
-What scores you attach to most value to depend on the **goal setting**. Let's say you have a pacemaker factory then you have to be sure that every pacemaker is 100% save, and you are ok with trowing away some pacemakers. Even some false negatives. Because economically speaking a false positive (working but looks broken) will cost you 10 euros while a false negative (broken but looks ok) will cost you a potential human live (wich will cost you more than 10 euros).
+What scores you attach to most value to depend on the **goal setting**. Let's say you have a pacemaker factory then you have to be sure that every pacemaker is 100% save, and you are ok with throwing away some pacemakers. Even some false negatives. Because economically speaking a false positive (working but looks broken) will cost you 10 euros while a false negative (broken but looks ok) will cost you a potential human live (wich will cost you more than 10 euros).
 
 Changing the threshold that is used to make a classification decision in a model is a way to adjust the trade-off of precision and recall for a given classifier. This gives you the precision recall curve. This is useful when you make a new model.
 
@@ -659,7 +659,7 @@ Then using that you can make the roc curve it looks like this:
 
 ### Multiclass classification metrics
 
-How do you use these extra metrics for classification were you have multiple classes? You make a **confusion matrix** were you calculate the metrics for every class.
+How do you use these extra metrics for classification were you have multiple classes? You make a **confusion matrix** where you calculate the metrics for every class.
 
 They look like this:
 
@@ -710,7 +710,7 @@ Again the idea is to calculate multiple metrics and focus more on the ones that 
 
 # Preprocessing and Feature Engineering
 
-When you trow your data at a machine learning model as is, you might not get optimal performance. You can do things to your data that do not change the semantics of your data while improving the generalization ability of your model.
+When you throw your data at a machine learning model as is, you might not get optimal performance. You can do things to your data that do not change the semantics of your data while improving the generalization ability of your model.
 
 ## Scaling
 
@@ -746,7 +746,7 @@ This method does not work for one feature but for the features of a point. It do
 
 ## Transforming the data
 
-Instead of just scaling the data you can also transform it. There are many techniques for this. Not only for machine learning also for stats in general. Most models perform best with normally distributed Gaussian data. Not every model for instance KNN does not most models benefit from it.
+Instead of just scaling the data you can also **transform** it. There are many ways of doing this, not only for machine learning but, also for stats in general. However most models perform best with normally distributed Gaussian data. Not every model will benifit from normal data. For instance KNN does not. But most models benefit from it.
 
 There are even methods to find the best method to transform your data to a Gaussian distribution. For instance Box-Cox and Yeo-Johnson transform. Both are power transform methods. The difference between these 2 methods is that Yeo-Johnson can also do negative numbers but therefore is also less interpretable. **With these techniques you can automatically estimate the parameters so that skewness is minimized and variance is stabilized.** Here is a visualization of the different techniques:
 
@@ -764,7 +764,7 @@ Binning (also known as discretization) is a preprocessing method to make linear 
 
 ## Missing values imputation
 
-Missing values imputation is about dealing with missing values in the dataset. With real data there are various reasons why data would be missing. Missing values might be represented in different ways common missing value representations are **None, blank, ~~0~~, NA, Na, NaN, Null, undefined ......** You should **NOT** use numbers to indicate missing data as this might not be picked up on. Always use strings or something else inconvenient. You could just trow away the data that contains missing values, but we can do better than that. You want to do this because it is sad to throw away a whole vector of data only because one scalar is missing.
+Missing values imputation is about dealing with missing values in the dataset. With real data there are various reasons why data would be missing. Missing values might be represented in different ways common missing value representations are **None, blank, ~~0~~, NA, Na, NaN, Null, undefined ......** You should **NOT** use numbers to indicate missing data as this might not be picked up on. Always use strings or something else inconvenient. You could just throw away the data that contains missing values, but we can do better than that. You want to do this because it is sad to throw away a whole vector of data only because one scalar is missing.
 
 This is how it would look like:
 
