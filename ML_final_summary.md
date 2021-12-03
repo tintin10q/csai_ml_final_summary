@@ -1,8 +1,10 @@
 ---
-title: Machine learning summary
+title: Machine learning Summary
+subtitle: A Summary for Introduction to Machine Learning (822047-B-6) from Tilburg University
 date: June 2021
+titlepage: true
 author:
-- Quinten Cabo  
+- Quinten Cabo
 numbersections: true
 geometry: margin=2cm
 lang: "en"
@@ -65,8 +67,8 @@ P() has these rules:
 > 2. P(True) = 1, P(false) = 0  
      > true = 1, false = 0
 
-> 3. P(A ∪ B) = P(A) + P(B) - P(A ∩ B)
-     > Set Theory. The chance for A AND B is P(A) + P(B) - P(A) ∩ P(B)
+> 3. P(A ∪ B) = P(A) + P(B) - P(A $\cap$ B)
+     > Set Theory. The chance for A AND B is P(A) + P(B) - P(A) $\cap$ P(B)
      > So A AND B is P(A) + P(B) - (What A and B have in common)
 
 ![Set Theory explanation](figures/setex.png)
