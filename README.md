@@ -20,10 +20,7 @@ Although I have tried my best to make sure this summary is correct, I will take 
 
 Do you appreciate my summaries, and you want to thank me then you can support me here:
 
-[PayPal](https://www.paypal.com/paypalme/quintencabo) or [Tikkie](https://tikkie.me/pay/cb1f5p56rumbk6gpcc8o)
-
-BTC: 1HjFv4NYiTwxdcnNpPEzaPY8vvYWXQnDgx ETH: 0xc0b430594A957A6A38203F45bd91f5d3568a39c6
-
+[PayPal](https://www.paypal.com/paypalme/quintencabo)
 
 ---
 
